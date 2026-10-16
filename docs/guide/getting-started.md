@@ -1,3 +1,7 @@
+---
+description: "Clone the repository, write a first *-pipeline.yaml and compile it to Fabric pipeline JSON with the Nx executor."
+---
+
 # Getting started
 
 FTAC is not yet published to npm. It runs from a clone of the repository, which is an [Nx](https://nx.dev) workspace.

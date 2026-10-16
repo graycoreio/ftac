@@ -1,3 +1,7 @@
+---
+description: "Every key a *-pipeline.yaml accepts: name, output, inputs, vars, env, datasets and steps."
+---
+
 # Pipeline syntax
 
 A `*-pipeline.yaml` describes one Fabric pipeline. The executor picks up every such file under a project and writes the JSON its `output:` names.

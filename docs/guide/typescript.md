@@ -1,3 +1,7 @@
+---
+description: "Build a Fabric pipeline from a build.ts with the @graycore/ftac TypeScript library instead of YAML."
+---
+
 # The TypeScript API
 
 The YAML compiler is a layer over a small TypeScript library, `@graycore/ftac`, in `lib/ftac`. A pipeline can call that library directly from a `build.ts` beside its sources. The executor treats a `build.ts` and a `*-pipeline.yaml` the same way, and the JSON it produces is identical.

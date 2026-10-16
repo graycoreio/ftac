@@ -1,3 +1,7 @@
+---
+description: "What FTAC is: a compiler that turns a GitHub Actions-style YAML pipeline into the pipeline-content.json a Microsoft Fabric data pipeline expects."
+---
+
 # What is FTAC?
 
 FTAC, the Fabric Terraform Actions Compiler, turns a `*-pipeline.yaml` written in [GitHub Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax) vocabulary into the `pipeline-content.json` that the [`microsoft/fabric` Terraform provider](https://registry.terraform.io/providers/microsoft/fabric/latest/docs/resources/data_pipeline) expects for a [Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/) data pipeline.

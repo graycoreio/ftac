@@ -1,3 +1,7 @@
+---
+description: "How ${{ }} expressions with inputs, vars, env and steps.x.outputs compile to the ADF expressions Fabric runs."
+---
+
 # Expressions
 
 `${{ }}` holds ADF expression source. The functions are ADF's own, such as `if`, `empty`, `greater`, `concat`, `utcNow` and `formatDateTime`, not GitHub Actions'. Only the references are Actions-style, and FTAC rewrites them:
