@@ -18,6 +18,7 @@ env:
 
 permissions:
   contents: read
+  actions: read # nx-set-shas reads the last successful workflow run
 
 jobs:
   build:
