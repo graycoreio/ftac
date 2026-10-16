@@ -19,12 +19,12 @@ jobs:
       matrix:
         node: [24.x]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: nrwl/nx-set-shas@v4
+      - uses: nrwl/nx-set-shas@v5
         name: Derive appropriate SHAs for base and head for `nx affected` commands
         with:
           main-branch-name: 'main'
