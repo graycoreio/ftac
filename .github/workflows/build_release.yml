@@ -5,9 +5,13 @@ on:
     tags:
       - 'v*'
 
+# A called workflow can hold no more than its caller. build.yml's deploy-docs
+# job asks for pages and id-token even though it skips on a tag.
 permissions:
   contents: read
   actions: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
