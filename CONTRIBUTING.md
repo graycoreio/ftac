@@ -214,7 +214,7 @@ The scope should be the name of the layer affected, as perceived by the person r
 
 The following is the list of supported scopes:
 
-- `expr`, `sql`, `stores`, `activities`, `pipeline`, `cli`, `executor`: the [library layers](./lib/fabric-builder/README.md#layers)
+- `expr`, `sql`, `stores`, `activities`, `pipeline`, `cli`, `executor`: the [library layers](./lib/ftac/README.md#layers)
 - `yaml`: the `*-pipeline.yaml` compiler
 - `actions`: the built-in `fabric/<name>` actions and their generated reference pages
 - `examples`: the reference pipelines under `examples/`

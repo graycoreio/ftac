@@ -1,12 +1,12 @@
 # The TypeScript API
 
-The YAML compiler is a layer over a small TypeScript library, `@graycore/ftac`, in `lib/fabric-builder`. A pipeline can call that library directly from a `build.ts` beside its sources. The executor treats a `build.ts` and a `*-pipeline.yaml` the same way, and the JSON it produces is identical.
+The YAML compiler is a layer over a small TypeScript library, `@graycore/ftac`, in `lib/ftac`. A pipeline can call that library directly from a `build.ts` beside its sources. The executor treats a `build.ts` and a `*-pipeline.yaml` the same way, and the JSON it produces is identical.
 
 ## A build file
 
 ```ts
 import { resolve } from 'node:path';
-import { copy, csvFile, csvSink, fn, ifEmpty, lakehouseFiles, loadSql, main, param, pipeline, postgresQuery, setVariable, sqlLiteral, variables } from '#fabric-builder';
+import { copy, csvFile, csvSink, fn, ifEmpty, lakehouseFiles, loadSql, main, param, pipeline, postgresQuery, setVariable, sqlLiteral, variables } from '#ftac';
 
 export const OUT = resolve(import.meta.dirname, '../my_pipeline.json');
 
@@ -27,7 +27,7 @@ export function build() {
 main(import.meta.url, { build, out: OUT });
 ```
 
-A build file must `export const OUT` and `export function build()`. It imports the library as `#fabric-builder`, a Node subpath import declared in the root `package.json`, so the depth of the pipeline directory does not matter.
+A build file must `export const OUT` and `export function build()`. It imports the library as `#ftac`, a Node subpath import declared in the root `package.json`, so the depth of the pipeline directory does not matter.
 
 ```sh
 node build.ts            # write the JSON
@@ -46,7 +46,7 @@ node build.ts --check    # exit 1 if the checked-in JSON is stale
 | `cli/`          | `main()`, `run()`, `stale()`                                                                                                                 |
 | `yaml/`         | The `*-pipeline.yaml` compiler: `loadYamlBuild()` and one `compile*` per construct                                                           |
 | `yaml/actions/` | One module per built-in `uses:` action, the registry, and the generated docs                                                                 |
-| `executor/`     | The Nx executor `./lib/fabric-builder:build`: finds every `build.ts` and `*-pipeline.yaml` under the project and writes or checks it         |
+| `executor/`     | The Nx executor `./lib/ftac:build`: finds every `build.ts` and `*-pipeline.yaml` under the project and writes or checks it         |
 
 ## Expression source
 

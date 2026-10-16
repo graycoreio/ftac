@@ -6,15 +6,15 @@
     "type:example"
   ],
   "implicitDependencies": [
-    "fabric-builder"
+    "ftac"
   ],
   "targets": {
     "build": {
-      "executor": "./lib/fabric-builder:build",
+      "executor": "./lib/ftac:build",
       "options": {}
     },
     "check": {
-      "executor": "./lib/fabric-builder:build",
+      "executor": "./lib/ftac:build",
       "dependsOn": [
         "^typecheck",
         "^test"

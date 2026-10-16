@@ -28,6 +28,6 @@
     "esbuild@0.21.5": true
   },
   "imports": {
-    "#fabric-builder": "./lib/fabric-builder/index.ts"
+    "#ftac": "./lib/ftac/index.ts"
   }
 }

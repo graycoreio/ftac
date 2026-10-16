@@ -6,14 +6,14 @@
     "type:docs"
   ],
   "implicitDependencies": [
-    "fabric-builder"
+    "ftac"
   ],
   "targets": {
     "actions": {
       "executor": "nx:run-commands",
       "cache": true,
       "inputs": [
-        "fabricBuilder",
+        "ftac",
         "{projectRoot}/writeActions.ts"
       ],
       "outputs": [

@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
-import { registry } from '../../lib/fabric-builder/yaml/actions/registry.ts';
-import { moduleName } from '../../lib/fabric-builder/yaml/actions/renderActionsDoc.ts';
+import { registry } from '../../lib/ftac/yaml/actions/registry.ts';
+import { moduleName } from '../../lib/ftac/yaml/actions/renderActionsDoc.ts';
 
 const REPO = 'https://github.com/graycoreio/ftac';
 

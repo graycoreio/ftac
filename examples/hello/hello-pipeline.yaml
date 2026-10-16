@@ -1,9 +1,9 @@
-# yaml-language-server: $schema=../../lib/fabric-builder/yaml/pipeline.schema.json
+# yaml-language-server: $schema=../../lib/ftac/yaml/pipeline.schema.json
 #
 # Hello_Pipeline: the smallest pipeline that exercises the YAML compiler end
 # to end. The executor specs check it, so hello.json must stay in sync:
 #
-#   node lib/fabric-builder/cli/main.ts   (or: npm run build:examples)
+#   node lib/ftac/cli/main.ts   (or: npm run build:examples)
 #
 name: Hello_Pipeline
 output: hello.json

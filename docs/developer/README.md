@@ -29,13 +29,13 @@ This is an [Nx](https://nx.dev) workspace with three projects.
 
 | Project          | Path                  | What it holds                                                                 |
 | ---------------- | --------------------- | ----------------------------------------------------------------------------- |
-| `fabric-builder` | `lib/fabric-builder`  | The library and the local Nx plugin that provides the `build` executor       |
+| `ftac` | `lib/ftac`  | The library and the local Nx plugin that provides the `build` executor       |
 | `examples`       | `examples`            | Reference pipelines, checked by the executor specs and by CI                  |
 | `docs`           | `docs`                | The user documentation site, built with [VitePress](https://vitepress.dev)   |
 
-`lib/fabric-builder` is also a local Nx plugin: its `package.json` points at
+`lib/ftac` is also a local Nx plugin: its `package.json` points at
 `executors.json`, which registers the `build` executor. Any project can use
-it as `./lib/fabric-builder:build`; it finds every `build.ts` and
+it as `./lib/ftac:build`; it finds every `build.ts` and
 `*-pipeline.yaml` under the project root and writes, or with `check: true`
 verifies, their JSON. The `examples` project's `build` and `check` targets
 are the reference wiring.
@@ -75,8 +75,8 @@ npx nx run-many -t test
 Run one project's suite, or a single spec file through vitest directly:
 
 ```bash
-npx nx run fabric-builder:test
-npx vitest run --config lib/fabric-builder/vitest.config.ts lib/fabric-builder/yaml/compileStep.test.ts
+npx nx run ftac:test
+npx vitest run --config lib/ftac/vitest.config.ts lib/ftac/yaml/compileStep.test.ts
 ```
 
 ## Typecheck
@@ -97,10 +97,10 @@ npx nx run docs:build     # write docs/.vitepress/dist, failing on dead links
 npx nx run docs:preview   # serve the built site
 ```
 
-The actions reference is not written by hand. `docs:actions`, which `dev` and `build` depend on, renders a page per action from the registry into `docs/reference/actions/`, which is gitignored. Change an action's description, inputs, or example in its module under `lib/fabric-builder/yaml/actions/` and the site follows. CI builds the site, so an example that no longer compiles fails the build.
+The actions reference is not written by hand. `docs:actions`, which `dev` and `build` depend on, renders a page per action from the registry into `docs/reference/actions/`, which is gitignored. Change an action's description, inputs, or example in its module under `lib/ftac/yaml/actions/` and the site follows. CI builds the site, so an example that no longer compiles fails the build.
 
 ## Reference
-* [The `fabric-builder` library](../../lib/fabric-builder/README.md): the YAML format, the TypeScript API, the lint, and the output conventions
-* [The actions registry](../../lib/fabric-builder/yaml/actions/registry.ts): one module per built-in action
-* [Editor schema](../../lib/fabric-builder/yaml/pipeline.schema.json)
+* [The `ftac` library](../../lib/ftac/README.md): the YAML format, the TypeScript API, the lint, and the output conventions
+* [The actions registry](../../lib/ftac/yaml/actions/registry.ts): one module per built-in action
+* [Editor schema](../../lib/ftac/yaml/pipeline.schema.json)
 * [The hello example](../../examples/hello/hello-pipeline.yaml)

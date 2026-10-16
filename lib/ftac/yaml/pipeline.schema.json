@@ -207,7 +207,7 @@
         },
         "uses": {
           "type": "string",
-          "description": "The action. Built-ins are fabric/<name>; see the actions reference on the docs site, or lib/fabric-builder/yaml/actions/registry.ts."
+          "description": "The action. Built-ins are fabric/<name>; see the actions reference on the docs site, or lib/ftac/yaml/actions/registry.ts."
         },
         "with": {
           "type": "object"

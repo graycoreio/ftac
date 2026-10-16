@@ -1,7 +1,7 @@
 {
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "name": "fabric-builder",
-  "sourceRoot": "lib/fabric-builder",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "ftac",
+  "sourceRoot": "lib/ftac",
   "projectType": "library",
   "tags": [
     "type:lib"
@@ -10,13 +10,13 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsc -p lib/fabric-builder"
+        "command": "tsc -p lib/ftac"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitest run --config lib/fabric-builder/vitest.config.ts"
+        "command": "vitest run --config lib/ftac/vitest.config.ts"
       }
     }
   }

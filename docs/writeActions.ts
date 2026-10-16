@@ -4,7 +4,7 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { actionDocs } from '../lib/fabric-builder/yaml/actions/actionDocs.ts';
+import { actionDocs } from '../lib/ftac/yaml/actions/actionDocs.ts';
 
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), 'reference/actions');
 

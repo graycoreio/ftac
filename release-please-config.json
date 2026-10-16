@@ -12,7 +12,7 @@
       "release-type": "node",
       "extra-files": [
         {
-          "path": "lib/fabric-builder/package.json",
+          "path": "lib/ftac/package.json",
           "type": "json",
           "jsonpath": "$.version"
         }

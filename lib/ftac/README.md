@@ -1,4 +1,4 @@
-# lib/fabric-builder
+# lib/ftac
 
 A small TypeScript library for generating Fabric pipeline definitions
 (`pipeline-content.json`) from source files that are pleasant to edit:
@@ -18,7 +18,7 @@ verifies its JSON. A build file must `export const OUT` and
 
 ```ts
 import { resolve } from 'node:path';
-import { copy, loadSql, main, pipeline, postgresQuery, setVariable, sqlLiteral, variables, ... } from '../../lib/fabric-builder/index.ts';
+import { copy, loadSql, main, pipeline, postgresQuery, setVariable, sqlLiteral, variables, ... } from '../../lib/ftac/index.ts';
 
 export const OUT = resolve(import.meta.dirname, '../my_pipeline.json');
 
@@ -46,7 +46,7 @@ npx nx run examples:check    # library typecheck + specs, then check=true
 npx nx run examples:build    # write every pipeline JSON
 ```
 
-Build files import the library as `#fabric-builder`, a Node subpath import
+Build files import the library as `#ftac`, a Node subpath import
 declared in the root `package.json`, so the depth of the pipeline directory
 doesn't matter.
 
@@ -120,7 +120,7 @@ How it maps:
 | `cli/`        | `main()`, `run()`, `stale()`                                                   |
 | `yaml/`       | The `*-pipeline.yaml` compiler: `loadYamlBuild()` and one `compile*` per construct |
 | `yaml/actions/` | One module per built-in `uses:` action, the registry, and the renderer for the site's actions reference |
-| `executor/`   | The nx executor `./lib/fabric-builder:build`: finds every `build.ts` under the project and writes or checks it |
+| `executor/`   | The nx executor `./lib/ftac:build`: finds every `build.ts` under the project and writes or checks it |
 
 Every helper returns expression *source text* with no leading `@`, so
 pieces compose as plain strings. Wrap the finished source with `expr()`
@@ -149,8 +149,8 @@ or anything else in the query would be read as expression syntax.
 ## Checks
 
 ```sh
-npx nx run fabric-builder:test       # the specs, no database needed
-npx nx run fabric-builder:typecheck  # tsc --noEmit
+npx nx run ftac:test       # the specs, no database needed
+npx nx run ftac:typecheck  # tsc --noEmit
 ```
 
 The root `vitest.config.js` has a database preflight, so these specs use
@@ -161,7 +161,7 @@ too, just behind the preflight.
 
 To YAML: write `<name>-pipeline.yaml` beside the sources with `output:` pointing at the JSON, run `npx nx run examples:build`, and review the JSON diff; then delete the build files. Or to a `build.ts`:
 
-1. Copy the pipeline-specific constants (connection ids, folder names, policies) into a new `build.ts` beside the sources, importing from `#fabric-builder`.
+1. Copy the pipeline-specific constants (connection ids, folder names, policies) into a new `build.ts` beside the sources, importing from `#ftac`.
 2. Rewrite each activity with its factory; replace `dependsOn` with `needs`. Export `build()` and `OUT`, and end with `main(import.meta.url, { build, out: OUT })`.
 3. `npx nx run examples:check` must pass before anything else changes. The JSON is the contract.
 4. Delete `build.js` and `build.test.js`. Keep a one-line `build.test.ts` that asserts `stale({ build, out: OUT })` is empty.

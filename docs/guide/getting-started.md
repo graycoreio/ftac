@@ -46,21 +46,21 @@ npx nx run examples:check
 
 ## Editor validation
 
-A JSON Schema for the YAML format lives at [`lib/fabric-builder/yaml/pipeline.schema.json`](https://github.com/graycoreio/ftac/blob/main/lib/fabric-builder/yaml/pipeline.schema.json). Point your editor's YAML language server at it for completion and validation.
+A JSON Schema for the YAML format lives at [`lib/ftac/yaml/pipeline.schema.json`](https://github.com/graycoreio/ftac/blob/main/lib/ftac/yaml/pipeline.schema.json). Point your editor's YAML language server at it for completion and validation.
 
 ## Use it from another project
 
-Any Nx project can use the executor as `./lib/fabric-builder:build`. The `examples` project's `build` and `check` targets are the reference wiring:
+Any Nx project can use the executor as `./lib/ftac:build`. The `examples` project's `build` and `check` targets are the reference wiring:
 
 ```json
 {
   "targets": {
     "build": {
-      "executor": "./lib/fabric-builder:build",
+      "executor": "./lib/ftac:build",
       "options": {}
     },
     "check": {
-      "executor": "./lib/fabric-builder:build",
+      "executor": "./lib/ftac:build",
       "options": { "check": true }
     }
   }
