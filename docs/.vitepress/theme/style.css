@@ -1,0 +1,33 @@
+/* Brand colours taken from the FTAC mark (docs/public/logo.svg). */
+:root {
+    --vp-c-brand-1: #117865;
+    --vp-c-brand-2: #1e9e85;
+    --vp-c-brand-3: #0e6961;
+    --vp-c-brand-soft: rgba(30, 158, 133, 0.14);
+
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: linear-gradient(120deg, #34d9b6 10%, #117865 90%);
+    --vp-home-hero-image-background-image: linear-gradient(-45deg, #34d9b6 40%, #6ad6f9 60%);
+    --vp-home-hero-image-filter: blur(48px);
+}
+
+.dark {
+    --vp-c-brand-1: #3ee8c4;
+    --vp-c-brand-2: #34d9b6;
+    --vp-c-brand-3: #1e9e85;
+    --vp-c-brand-soft: rgba(62, 232, 196, 0.16);
+
+    --vp-home-hero-name-background: linear-gradient(120deg, #6ad6f9 10%, #34d9b6 90%);
+}
+
+@media (min-width: 640px) {
+    :root {
+        --vp-home-hero-image-filter: blur(64px);
+    }
+}
+
+@media (min-width: 960px) {
+    :root {
+        --vp-home-hero-image-filter: blur(72px);
+    }
+}

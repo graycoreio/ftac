@@ -10,6 +10,7 @@ export default defineConfig({
     base: process.env.DOCS_BASE ?? '/',
     description: 'Fabric pipelines, written like GitHub Actions.',
     cleanUrls: true,
+    head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
     srcExclude: ['developer/**'],
     markdown: {
         config(md) {
@@ -23,6 +24,7 @@ export default defineConfig({
         },
     },
     themeConfig: {
+        logo: '/logo.svg',
         nav: [
             { text: 'Guide', link: '/guide/', activeMatch: '/guide/' },
             { text: 'Reference', link: '/reference/pipeline-syntax', activeMatch: '/reference/' },
@@ -52,5 +54,6 @@ export default defineConfig({
         socialLinks: [{ icon: 'github', link: REPO }],
         search: { provider: 'local' },
         outline: [2, 3],
+        footer: { message: 'Released under the <a href="https://github.com/graycoreio/ftac/blob/main/LICENSE">MIT License</a>.', copyright: 'Copyright © 2026 Graycore, LLC' },
     },
 });

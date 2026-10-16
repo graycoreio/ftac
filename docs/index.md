@@ -5,6 +5,9 @@ hero:
   name: FTAC
   text: Fabric pipelines, written like GitHub Actions.
   tagline: Compile Microsoft Fabric pipeline definitions from YAML. You edit a *-pipeline.yaml. FTAC generates the pipeline-content.json so you never have to.
+  image:
+    src: /logo.svg
+    alt: FTAC
   actions:
     - theme: brand
       text: Get started

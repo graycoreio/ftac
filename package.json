@@ -2,6 +2,7 @@
   "name": "ftac",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "typecheck": "nx run-many -t typecheck",

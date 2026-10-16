@@ -1,4 +1,12 @@
-<h1 align="center">FTAC - Fabric pipelines, written like GitHub Actions.</h1>
+<p align="center">
+  <a href="https://github.com/graycoreio/ftac">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/public/wordmark-dark.svg">
+      <img src="docs/public/wordmark-light.svg" alt="FTAC" width="300">
+    </picture>
+  </a>
+</p>
+<h1 align="center">Fabric pipelines, written like GitHub Actions.</h1>
 <h2 align="center">Fabric Terraform Actions Compiler</h2>
 
 <p align="center">
@@ -63,5 +71,9 @@ steps:
 - Built-in actions: every `fabric/<name>` action, its inputs, and what it compiles to. Generated from the registry onto the docs site; run `npm run docs:dev` to browse it.
 - [Developer documentation](./docs/developer/README.md): the Nx workspace, how to build, test, and regenerate the committed output.
 - [Contributing](./CONTRIBUTING.md): submission guidelines, coding rules, and the commit message format.
+
+## License
+
+FTAC is released under the [MIT License](./LICENSE).
 
 **Think FTAC is the bees-knees? Give our repo a star :star: :heart:.**
