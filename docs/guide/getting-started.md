@@ -98,7 +98,7 @@ One pipeline at a time, by a glob relative to the project root:
 npx nx run pipelines:build --pattern '**/<name>/*-pipeline.yaml'
 ```
 
-The executor also picks up any `build.ts` that calls the library directly; the package [README](https://www.npmjs.com/package/@graycore/ftac) shows one. The executor's options are `check` and `pattern`; `npx nx list @graycore/ftac` prints them.
+The [executors reference](/reference/executors/build) lists every option.
 
 ## Editor validation
 

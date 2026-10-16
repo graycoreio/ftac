@@ -35,9 +35,8 @@ This is an [Nx](https://nx.dev) workspace with three projects.
 
 `lib/ftac` is also a local Nx plugin: its `package.json` points at
 `executors.json`, which registers the `build` executor. Any project can use
-it as `./lib/ftac:build`; it finds every `build.ts` and
-`*-pipeline.yaml` under the project root and writes, or with `check: true`
-verifies, their JSON. The `examples` project's `build` and `check` targets
+it as `./lib/ftac:build`; it finds every `*-pipeline.yaml` under the
+project root and writes, or with `check: true` verifies, their JSON. The `examples` project's `build` and `check` targets
 are the reference wiring.
 
 ### Full Build
@@ -53,13 +52,6 @@ Build a single project, or a single pipeline by pattern:
 ```bash
 npx nx run examples:build
 npx nx run examples:build --pattern '**/hello/*-pipeline.yaml'
-```
-
-A single pipeline authored as a `build.ts` can also be run on its own:
-
-```bash
-node path/to/build.ts            # write the JSON
-node path/to/build.ts --check    # exit 1 if the checked-in JSON is stale
 ```
 
 ## Running unit tests

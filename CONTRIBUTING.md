@@ -45,7 +45,7 @@ is usually a small feature: one module and one spec; the actions reference on th
 
 Before you submit an issue, please search the issue tracker, maybe an issue for your problem already exists and the discussion might inform you of workarounds readily available.
 
-We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs, we will systematically ask you to provide a minimal reproduction: the smallest `*-pipeline.yaml` (or `build.ts`) that shows the problem, the JSON FTAC generated for it, and the JSON you expected. The [hello example][hello] is a good starting point to cut down from. Having a reproducible scenario gives us a wealth of important information without going back & forth to you with additional questions like:
+We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs, we will systematically ask you to provide a minimal reproduction: the smallest `*-pipeline.yaml` that shows the problem, the JSON FTAC generated for it, and the JSON you expected. The [hello example][hello] is a good starting point to cut down from. Having a reproducible scenario gives us a wealth of important information without going back & forth to you with additional questions like:
 
 - the FTAC commit used
 - the Node version

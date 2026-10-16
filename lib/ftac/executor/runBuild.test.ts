@@ -14,14 +14,14 @@ const tmp = () => mkdtempSync(join(tmpdir(), 'builder-'));
 it('reports the example YAML build as in sync', async () =>
     expect(await runBuild(EXAMPLE, true)).toEqual({ file: EXAMPLE, ok: true, message: 'in sync' }));
 
-it('rejects a build file without the expected exports', async () => {
-    const f = join(tmp(), 'build.ts');
-    writeFileSync(f, 'export const nothing = 1;\n');
-    expect(await runBuild(f, true)).toMatchObject({ ok: false, message: 'must export build() and OUT' });
+it('rejects a file that is not a YAML mapping', async () => {
+    const f = join(tmp(), 'list-pipeline.yaml');
+    writeFileSync(f, '- not\n- a pipeline\n');
+    expect(await runBuild(f, true)).toMatchObject({ ok: false, message: `${f}: not a YAML mapping` });
 });
 
-it('reports a build that throws', async () => {
-    const f = join(tmp(), 'build.ts');
-    writeFileSync(f, "export const OUT = '/dev/null'; export function build() { throw new Error('boom'); }\n");
-    expect(await runBuild(f, false)).toMatchObject({ ok: false, message: 'boom' });
+it('reports a pipeline that fails to compile', async () => {
+    const f = join(tmp(), 'bad-pipeline.yaml');
+    writeFileSync(f, 'name: Bad\noutput: bad.json\nsteps:\n  - id: a\n    uses: fabric/nope\n');
+    expect(await runBuild(f, false)).toMatchObject({ ok: false, message: expect.stringContaining("a: unknown uses: 'fabric/nope'") });
 });

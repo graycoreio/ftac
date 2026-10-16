@@ -29,9 +29,8 @@ process.exit(run(loadYamlBuild('hello-pipeline.yaml')));
 ```
 
 Nx is supported out of the box. The package is an [Nx](https://nx.dev)
-plugin whose `build` executor finds every `*-pipeline.yaml` (and every
-`build.ts`) under a project and writes, or with `check: true` verifies,
-the JSON each names:
+plugin whose `build` executor finds every `*-pipeline.yaml` under a
+project and writes, or with `check: true` verifies, the JSON each names:
 
 ```json
 {
@@ -106,47 +105,6 @@ How it maps:
 The full key list is in [Pipeline syntax](https://graycoreio.github.io/ftac/reference/pipeline-syntax)
 and what goes inside `${{ }}` in [Expressions](https://graycoreio.github.io/ftac/reference/expressions).
 
-## A build file
-
-The YAML compiler is a layer over a TypeScript library. A pipeline can
-call it directly from a `build.ts` beside its sources; the executor treats
-it like a `*-pipeline.yaml`.
-A build file must `export const OUT` and `export function build()`.
-
-```ts
-import { resolve } from 'node:path';
-import { copy, csvFile, csvSink, fn, ifEmpty, lakehouseFiles, loadSql, main, param, pipeline, postgresQuery, setVariable, sqlLiteral, variables } from '@graycore/ftac';
-
-export const OUT = resolve(import.meta.dirname, '../my_pipeline.json');
-
-export function build() {
-    return pipeline({
-        activities: [
-            setVariable('set_date', 'date', ifEmpty(param('date'), fn.utcNow())),
-            copy('load', {
-                source: postgresQuery({ connection: POSTGRES, query: loadSql('query.pgsql', { $1: sqlLiteral(variables('date')) }) }),
-                sink: csvSink({ dataset: csvFile({ store: lakehouseFiles('brz_lakehouse'), folderPath: 'Sales', fileName: 'out.csv' }) }),
-            }, { needs: 'set_date' }),
-        ],
-        parameters: { date: { type: 'string', defaultValue: '' } },
-        variables: { date: 'String' },
-    });
-}
-
-main(import.meta.url, { build, out: OUT });
-```
-
-```sh
-node build.ts            # write the JSON
-node build.ts --check    # exit 1 if the checked-in JSON is stale
-```
-
-Every helper returns expression *source text* with no leading `@`, so
-pieces compose as plain strings. Wrap the finished source with `expr()`
-to put it in a definition slot. `text()` is for plain values in a slot
-(a query, a path) and refuses a leading `@`; `literal()` also refuses
-`@{ }` interpolation, which Script batches must not contain.
-
 ## Layers
 
 | Directory     | What it holds                                                                 |
@@ -156,10 +114,10 @@ to put it in a definition slot. `text()` is for plain values in a slot
 | `stores/`     | Linked services (`lakehouseFiles`, `lakehouseTables`, `warehouse`), datasets, Copy sources and sinks |
 | `activities/` | One factory per activity type: `(name, props, { needs, policy })`             |
 | `pipeline/`   | `pipeline()` assembles and lints; `render()` is the file format              |
-| `cli/`        | `main()`, `run()`, `stale()`                                                   |
+| `cli/`        | `run()`, `stale()`                                                             |
 | `yaml/`       | The `*-pipeline.yaml` compiler: `loadYamlBuild()` and one `compile*` per construct |
 | `yaml/actions/` | One module per built-in `uses:` action, the registry, and the renderer for the site's actions reference |
-| `executor/`   | The Nx executor `@graycore/ftac:build`: finds every `build.ts` and `*-pipeline.yaml` under the project and writes or checks it |
+| `executor/`   | The Nx executor `@graycore/ftac:build`: finds every `*-pipeline.yaml` under the project and writes or checks it |
 
 ## What the lint catches
 

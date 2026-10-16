@@ -55,7 +55,6 @@ export { render } from './pipeline/render.ts';
 
 export { stale } from './cli/stale.ts';
 export { run } from './cli/run.ts';
-export { main } from './cli/main.ts';
 
 export { loadYamlBuild } from './yaml/loadYamlBuild.ts';
 export { compileDocument } from './yaml/compileDocument.ts';

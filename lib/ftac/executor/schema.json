@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/schema",
   "version": 2,
   "title": "Pipeline builds",
-  "description": "Run every build.ts and *-pipeline.yaml matching the pattern.",
+  "description": "Compile every *-pipeline.yaml matching the pattern.",
   "type": "object",
   "properties": {
     "check": {
@@ -12,8 +12,8 @@
     },
     "pattern": {
       "type": "string",
-      "description": "Glob for build files, relative to the project root.",
-      "default": "**/{build.ts,*-pipeline.yaml}"
+      "description": "Glob for pipeline files, relative to the project root.",
+      "default": "**/*-pipeline.yaml"
     }
   },
   "additionalProperties": false

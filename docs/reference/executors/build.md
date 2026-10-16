@@ -1,12 +1,12 @@
 ---
-description: "The @graycore/ftac:build executor: compile every *-pipeline.yaml and build.ts under a project, or verify the committed JSON is current."
+description: "The @graycore/ftac:build executor: compile every *-pipeline.yaml under a project, or verify the committed JSON is current."
 ---
 
 # build
 
-Run every `build.ts` and `*-pipeline.yaml` under the project: write the pipeline JSON, or with `check: true` verify the checked-in JSON is current.
+Compile every `*-pipeline.yaml` under the project: write the pipeline JSON, or with `check: true` verify the checked-in JSON is current.
 
-The executor finds every build file under the project root, loads each one, and either writes the JSON its `output:` (or exported `OUT`) names, or compares the committed JSON against what the build produces now. It prints one line per file and a summary, and fails when any file fails. Files under `node_modules` are skipped.
+The executor finds every pipeline file under the project root, compiles each one, and either writes the JSON its `output:` names, or compares the committed JSON against what the build produces now. It prints one line per file and a summary, and fails when any file fails. Files under `node_modules` are skipped.
 
 ## Options
 
@@ -18,9 +18,9 @@ Verify each checked-in JSON matches its build instead of writing it. A build who
 
 ### `pattern`
 
-`string`, default `**/{build.ts,*-pipeline.yaml}`.
+`string`, default `**/*-pipeline.yaml`.
 
-Glob for build files, relative to the project root. Use it to build one pipeline, or one directory, at a time.
+Glob for pipeline files, relative to the project root. Use it to build one pipeline, or one directory, at a time.
 
 ## Example
 
@@ -64,4 +64,4 @@ FAIL pipelines/hello/hello-pipeline.yaml: pipelines/hello/hello.json is stale â€
 0/1 builds in sync
 ```
 
-A build that throws, or a `build.ts` that does not export `build()` and `OUT`, is listed the same way with its error message.
+A pipeline that fails to compile is listed the same way with its error message.
