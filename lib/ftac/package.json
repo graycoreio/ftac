@@ -1,8 +1,39 @@
 {
   "name": "@graycore/ftac",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "Fabric Terraform Actions Compiler: Microsoft Fabric pipeline definitions from YAML written like GitHub Actions.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/graycoreio/ftac"
+  },
+  "author": "Graycore LLC",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/graycoreio/ftac/issues"
+  },
+  "homepage": "https://graycoreio.github.io/ftac/",
   "type": "module",
-  "executors": "./executors.json"
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "executors": "./executors.json",
+  "dependencies": {
+    "yaml": "0.0.0-PLACEHOLDER"
+  },
+  "scripts": {
+    "build": "rm -rf ../../dist/ftac && tsc -p tsconfig.build.json && node pack.ts",
+    "publish": "cd ../../dist/ftac && npm publish --access=public"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{workspaceRoot}/dist/ftac"
+        ]
+      }
+    }
+  }
 }

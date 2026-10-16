@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": ".",
+    "outDir": "../../dist/ftac",
+    "declaration": true,
+    "rewriteRelativeImportExtensions": true
+  },
+  "exclude": ["**/*.test.ts", "vitest.config.ts", "pack.ts"]
+}

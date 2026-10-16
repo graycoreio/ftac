@@ -9,3 +9,6 @@ node_modules/
 docs/reference/actions
 docs/.vitepress/cache
 docs/.vitepress/dist
+
+# Published package build
+dist

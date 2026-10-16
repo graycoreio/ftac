@@ -1,0 +1,15 @@
+name: FTAC Build Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+    name: Build Release
+    uses: ./.github/workflows/build.yml

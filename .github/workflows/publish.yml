@@ -1,0 +1,57 @@
+name: Publish Release
+
+on:
+  workflow_run:
+    workflows:
+      - FTAC Build Release
+    types:
+      - completed
+  workflow_dispatch:
+
+env:
+  NPM_VERSION: 11
+
+permissions:
+  id-token: write # npm trusted publishing and provenance
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish
+    if: |
+      (github.event.workflow_run.conclusion == 'success') ||
+      (github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/tags/v'))
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: graycoreio/github-actions/setup-node@main
+        with:
+          node-version: 24.x
+          npm-version: ${{ env.NPM_VERSION }}
+          use-stamp-cache: true
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npx nx run ftac:build
+
+      # Replace 0.0.0-PLACEHOLDER in dist/**/package.json with the root
+      # version and the root's dependency versions.
+      - uses: graycoreio/github-actions/set-versions-from-root@main
+
+      # A prerelease version publishes under next, a stable one under latest.
+      - id: compute-npm-tag
+        run: |
+          VERSION=$(jq -r .version package.json)
+          case "$VERSION" in
+            *-*) echo "npm_tag=next" >> "$GITHUB_OUTPUT" ;;
+            *)   echo "npm_tag=latest" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - run: npx nx run-many -t publish -- --tag $NPM_TAG
+        env:
+          NPM_TAG: ${{ steps.compute-npm-tag.outputs.npm_tag }}

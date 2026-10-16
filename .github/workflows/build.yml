@@ -9,6 +9,8 @@ on:
       - main
   # Run from the Actions tab; on main this also deploys the docs.
   workflow_dispatch:
+  # Called by build_release.yml on a version tag.
+  workflow_call:
 
 env:
   NPM_VERSION: 11
@@ -55,6 +57,8 @@ jobs:
         run: git diff --exit-code
 
       - run: npx nx run docs:build
+
+      - run: npx nx run ftac:build
 
       - uses: actions/upload-pages-artifact@v5
         with:

@@ -9,14 +9,7 @@
   "pull-request-title-pattern": "chore: release ${version}",
   "packages": {
     ".": {
-      "release-type": "node",
-      "extra-files": [
-        {
-          "path": "lib/ftac/package.json",
-          "type": "json",
-          "jsonpath": "$.version"
-        }
-      ]
+      "release-type": "node"
     }
   }
 }

@@ -99,6 +99,12 @@ npx nx run docs:preview   # serve the built site
 
 The actions reference is not written by hand. `docs:actions`, which `dev` and `build` depend on, renders a page per action from the registry into `docs/reference/actions/`, which is gitignored. Change an action's description, inputs, or example in its module under `lib/ftac/yaml/actions/` and the site follows. CI builds the site, so an example that no longer compiles fails the build.
 
+## Publishing to npm
+
+The library is published as [`@graycore/ftac`](https://www.npmjs.com/package/@graycore/ftac) from `dist/ftac`, which `npx nx run ftac:build` writes: `tsc` emits JavaScript and declarations with the `.ts` import extensions rewritten, and `pack.ts` adds the manifest, the executor registry, the schemas, the README, and the license.
+
+The version in `lib/ftac/package.json` is `0.0.0-PLACEHOLDER`, as is the version of each dependency. Merging the release-please PR tags `v<version>`; the tag runs the build again, and the publish workflow then sets the placeholders from the root `package.json` and publishes. A version with a prerelease suffix goes to the `next` dist-tag, otherwise `latest`. Publishing uses npm trusted publishing, so there is no token to rotate.
+
 ## Reference
 * [The `ftac` library](../../lib/ftac/README.md): the YAML format, the TypeScript API, the lint, and the output conventions
 * [The actions registry](../../lib/ftac/yaml/actions/registry.ts): one module per built-in action
