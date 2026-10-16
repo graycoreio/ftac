@@ -6,6 +6,8 @@ const REPO = 'https://github.com/graycoreio/ftac';
 
 export default defineConfig({
     title: 'FTAC',
+    // '/' locally; CI sets DOCS_BASE to the project-page path.
+    base: process.env.DOCS_BASE ?? '/',
     description: 'Fabric pipelines, written like GitHub Actions.',
     cleanUrls: true,
     srcExclude: ['developer/**'],

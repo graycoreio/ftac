@@ -10,6 +10,12 @@ on:
 
 env:
   NPM_VERSION: 11
+  # The site is a project page under graycoreio.github.io, so it is built
+  # for that path. Remove this once a custom domain serves it from /.
+  DOCS_BASE: /ftac/
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -46,6 +52,25 @@ jobs:
         run: git diff --exit-code
 
       - run: npx nx run docs:build
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/.vitepress/dist
+
+  deploy-docs:
+    name: Deploy Docs
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v5
+        id: deployment
 
   build-success:
     name: Build Success
