@@ -1,23 +1,73 @@
 ---
-description: "Install @graycore/ftac from npm, write a first *-pipeline.yaml and compile it to Fabric pipeline JSON with the Nx executor."
+description: "Install @graycore/ftac from npm, write a first *-pipeline.yaml and compile it to Fabric pipeline JSON from an npm script or with the Nx plugin."
 ---
 
 # Getting started
 
-FTAC is published to npm as [`@graycore/ftac`](https://www.npmjs.com/package/@graycore/ftac). It is a library and an [Nx](https://nx.dev) plugin: the plugin's `build` executor finds every `*-pipeline.yaml` under a project and writes the JSON it names.
+FTAC is published to npm as [`@graycore/ftac`](https://www.npmjs.com/package/@graycore/ftac). It compiles a `*-pipeline.yaml` into the JSON a Fabric data pipeline expects, and it does so at build time: the JSON is generated, committed next to its source, and checked in CI.
+
+There are two ways to run it. A plain npm script works in any repository. If your repository is an [Nx](https://nx.dev) workspace, the package is also an Nx plugin with a ready-made executor.
 
 ## Prerequisites
 
-- [Node](https://nodejs.org) 24 or later.
-- An [Nx](https://nx.dev) workspace. Any repository with an `nx.json` and `nx` installed will do.
+- [Node](https://nodejs.org) 22.18 or later.
 
 ## Install
 
 ```bash
-npm install --save-dev @graycore/ftac nx
+npm install --save-dev @graycore/ftac
 ```
 
-## Wire up a project
+## Write your first pipeline
+
+1. Put a `<name>-pipeline.yaml` beside the sources it belongs to. Copy the [hello pipeline](https://github.com/graycoreio/ftac/blob/main/examples/hello/hello-pipeline.yaml) to start.
+2. Set `output:` to where the JSON should go, relative to the YAML file.
+3. Compile it with one of the two setups below.
+4. Review the JSON diff, then commit the YAML and the JSON together.
+
+[Pipeline syntax](/reference/pipeline-syntax) covers every key the file takes, and [Expressions](/reference/expressions) what goes inside `${{ }}`.
+
+## Compile from an npm script
+
+The library exports `loadYamlBuild()`, which turns a YAML file into a build, and `run()`, which writes the build's JSON or, with `--check`, exits 1 when the committed JSON is stale. A short script compiles every pipeline in the repository:
+
+```ts
+// scripts/pipelines.ts
+import { globSync } from 'node:fs';
+import { loadYamlBuild, run } from '@graycore/ftac';
+
+let code = 0;
+for (const file of globSync('**/*-pipeline.yaml', { exclude: (p: string) => p.includes('node_modules') })) {
+    code = run(loadYamlBuild(file)) || code;
+}
+process.exit(code);
+```
+
+Wire it into `package.json`:
+
+```json
+{
+  "scripts": {
+    "pipelines": "node scripts/pipelines.ts",
+    "pipelines:check": "node scripts/pipelines.ts --check"
+  }
+}
+```
+
+```bash
+npm run pipelines          # write every pipeline JSON
+npm run pipelines:check    # exit 1 if any committed JSON is stale
+```
+
+Run the check in CI so a hand-edited JSON, or a forgotten rebuild, fails the build.
+
+## Compile with Nx
+
+Nx is supported out of the box: `@graycore/ftac` is an Nx plugin, and its `build` executor finds every `*-pipeline.yaml` under a project and writes, or verifies, the JSON each names. No script is needed.
+
+```bash
+npm install --save-dev nx
+```
 
 Add `build` and `check` targets to the project that holds your pipelines:
 
@@ -37,27 +87,18 @@ Add `build` and `check` targets to the project that holds your pipelines:
 }
 ```
 
-`build` finds every `*-pipeline.yaml` (and every `build.ts`) under the project root and writes the JSON named by its `output:`. `check` verifies the committed JSON is in sync instead of writing it, so CI fails when someone edits the JSON by hand or forgets to rebuild.
+```bash
+npx nx run pipelines:build    # write every pipeline JSON under the project
+npx nx run pipelines:check    # exit 1 if any committed JSON is stale
+```
 
-## Write your first pipeline
+One pipeline at a time, by a glob relative to the project root:
 
-1. Put a `<name>-pipeline.yaml` in a directory under the project. Copy the [hello pipeline](https://github.com/graycoreio/ftac/blob/main/examples/hello/hello-pipeline.yaml) to start.
-2. Set `output:` to where the JSON should go, relative to the YAML file.
-3. Build it:
+```bash
+npx nx run pipelines:build --pattern '**/<name>/*-pipeline.yaml'
+```
 
-   ```bash
-   npx nx run pipelines:build
-   ```
-
-   Or one pipeline by pattern, relative to the project root:
-
-   ```bash
-   npx nx run pipelines:build --pattern '**/<name>/*-pipeline.yaml'
-   ```
-
-4. Review the JSON diff, then commit the YAML and the JSON together.
-
-[Pipeline syntax](/reference/pipeline-syntax) covers every key the file takes, and [Expressions](/reference/expressions) what goes inside `${{ }}`.
+The executor also picks up any `build.ts` that calls the library directly; the package [README](https://www.npmjs.com/package/@graycore/ftac) shows one. The executor's options are `check` and `pattern`; `npx nx list @graycore/ftac` prints them.
 
 ## Editor validation
 
@@ -69,19 +110,3 @@ name: My_Pipeline
 ```
 
 The same schema is on GitHub at [`lib/ftac/yaml/pipeline.schema.json`](https://github.com/graycoreio/ftac/blob/main/lib/ftac/yaml/pipeline.schema.json).
-
-## Without Nx
-
-The executor is a thin layer over two exported functions. A script can compile one YAML file directly:
-
-```ts
-import { loadYamlBuild, run } from '@graycore/ftac';
-
-process.exit(run(loadYamlBuild('hello-pipeline.yaml')));
-```
-
-`run()` writes the JSON, or with `--check` on the command line exits 1 when the committed JSON is stale.
-
-## Working from a clone
-
-To run FTAC from its source instead, clone the repository and follow the [developer documentation](https://github.com/graycoreio/ftac/blob/main/docs/developer/README.md). The `examples` project there is the reference wiring.

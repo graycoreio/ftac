@@ -14,12 +14,24 @@ Documentation: <https://graycoreio.github.io/ftac/>
 ## Install
 
 ```sh
-npm install --save-dev @graycore/ftac nx
+npm install --save-dev @graycore/ftac
 ```
 
-The package is a library and an [Nx](https://nx.dev) plugin. Its `build`
-executor finds every `*-pipeline.yaml` (and every `build.ts`) under a
-project and writes, or with `check: true` verifies, the JSON each names:
+FTAC runs at build time: the JSON is generated, committed next to its
+source, and checked in CI. From an npm script, `loadYamlBuild()` turns a
+`*-pipeline.yaml` into a build and `run()` writes its JSON, or with
+`--check` exits 1 when the committed JSON is stale:
+
+```ts
+import { loadYamlBuild, run } from '@graycore/ftac';
+
+process.exit(run(loadYamlBuild('hello-pipeline.yaml')));
+```
+
+Nx is supported out of the box. The package is an [Nx](https://nx.dev)
+plugin whose `build` executor finds every `*-pipeline.yaml` (and every
+`build.ts`) under a project and writes, or with `check: true` verifies,
+the JSON each names:
 
 ```json
 {
@@ -98,7 +110,7 @@ and what goes inside `${{ }}` in [Expressions](https://graycoreio.github.io/ftac
 
 The YAML compiler is a layer over a TypeScript library. A pipeline can
 call it directly from a `build.ts` beside its sources; the executor treats
-it like a `*-pipeline.yaml`, and Node 24 runs it with no compile step.
+it like a `*-pipeline.yaml`.
 A build file must `export const OUT` and `export function build()`.
 
 ```ts

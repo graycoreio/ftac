@@ -121,6 +121,11 @@ export default defineConfig({
                 { text: 'Pipeline syntax', link: '/reference/pipeline-syntax' },
                 { text: 'Expressions', link: '/reference/expressions' },
                 {
+                    text: 'Executors',
+                    link: '/reference/executors/',
+                    items: [{ text: 'build', link: '/reference/executors/build' }],
+                },
+                {
                     text: 'Actions',
                     link: '/reference/actions/',
                     items: [...registry.keys()].map((name) => ({ text: name, link: `/reference/actions/${moduleName(name)}` })),
