@@ -4,8 +4,8 @@ import { expect, it } from 'vitest';
 import { findBuilds } from './findBuilds.ts';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const SOVOS = 'terraform/modules/data-workspace/esg/definitions/pipelines/eom_financial_report_generation/Sovos_Tax_File_Monthly/sovos-pipeline.yaml';
+const HELLO = 'examples/hello/hello-pipeline.yaml';
 
 it('finds build files under a root, as absolute sorted paths', () =>
-    expect(findBuilds(ROOT, '**/Sovos_Tax_File_Monthly/*-pipeline.yaml')).toEqual([resolve(ROOT, SOVOS)]));
+    expect(findBuilds(ROOT, '**/hello/*-pipeline.yaml')).toEqual([resolve(ROOT, HELLO)]));
 it('is empty when nothing matches', () => expect(findBuilds(ROOT, 'nowhere/*.ts')).toEqual([]));

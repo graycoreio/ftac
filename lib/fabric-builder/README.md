@@ -9,8 +9,8 @@ One function per file. `index.ts` re-exports everything. Node 24 runs the
 `.ts` files directly, so a build is `node build.ts` with no compile step.
 
 The directory is also a local nx plugin (`package.json` + `executors.json`).
-The `terraform` project's `build` and `check` targets use its `build`
-executor, which imports every `build.ts` under `terraform/` and writes or
+The `examples` project's `build` and `check` targets use its `build`
+executor, which imports every `build.ts` under `examples/` and writes or
 verifies its JSON. A build file must `export const OUT` and
 `export function build()`.
 
@@ -42,8 +42,8 @@ main(import.meta.url, { build, out: OUT });
 ```sh
 node build.ts            # write the JSON
 node build.ts --check    # exit 1 if the checked-in JSON is stale
-npx nx run terraform:check   # typecheck every build.ts + library specs, then check=true
-npx nx run terraform:build   # write every pipeline JSON
+npx nx run examples:check    # library typecheck + specs, then check=true
+npx nx run examples:build    # write every pipeline JSON
 ```
 
 Build files import the library as `#fabric-builder`, a Node subpath import
@@ -54,8 +54,8 @@ doesn't matter.
 
 A `*-pipeline.yaml` beside the sources is the other way to author a
 pipeline, in GitHub Actions vocabulary. The executor picks it up like a
-`build.ts`. The Sovos monthly pipeline
-(`terraform/.../Sovos_Tax_File_Monthly/sovos-pipeline.yaml`) is the
+`build.ts`. The hello pipeline
+(`examples/hello/hello-pipeline.yaml`) is the
 reference; the schema for editor validation is `yaml/pipeline.schema.json`.
 
 ```yaml
@@ -159,9 +159,9 @@ too, just behind the preflight.
 
 ## Migrating an existing build.js
 
-To YAML: write `<name>-pipeline.yaml` beside the sources with `output:` pointing at the JSON, run `npx nx run terraform:build`, and review the JSON diff; then delete the build files. Or to a `build.ts`:
+To YAML: write `<name>-pipeline.yaml` beside the sources with `output:` pointing at the JSON, run `npx nx run examples:build`, and review the JSON diff; then delete the build files. Or to a `build.ts`:
 
 1. Copy the pipeline-specific constants (connection ids, folder names, policies) into a new `build.ts` beside the sources, importing from `#fabric-builder`.
 2. Rewrite each activity with its factory; replace `dependsOn` with `needs`. Export `build()` and `OUT`, and end with `main(import.meta.url, { build, out: OUT })`.
-3. `npx nx run terraform:check` must pass before anything else changes. The JSON is the contract.
-4. Delete `build.js` and `build.test.js`. Keep a one-line `build.test.ts` that asserts `stale({ build, out: OUT })` is empty, as the Sovos pipeline does.
+3. `npx nx run examples:check` must pass before anything else changes. The JSON is the contract.
+4. Delete `build.js` and `build.test.js`. Keep a one-line `build.test.ts` that asserts `stale({ build, out: OUT })` is empty.

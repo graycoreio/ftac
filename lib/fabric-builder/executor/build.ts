@@ -1,6 +1,6 @@
 // nx executor: run every pipeline build (build.ts or *-pipeline.yaml) under the project.
-//   nx run terraform:build            write each pipeline JSON
-//   nx run terraform:check            check=true, exit 1 if any is stale
+//   nx run examples:build             write each pipeline JSON
+//   nx run examples:check             check=true, exit 1 if any is stale
 import { relative, resolve } from 'node:path';
 import { findBuilds } from './findBuilds.ts';
 import { runBuild } from './runBuild.ts';

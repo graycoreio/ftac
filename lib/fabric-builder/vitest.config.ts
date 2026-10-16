@@ -7,5 +7,5 @@ import { defineConfig } from 'vitest/config';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 export default defineConfig({
-    test: { root: ROOT, include: ['lib/fabric-builder/**/*.test.ts', 'terraform/**/build.test.ts'] },
+    test: { root: ROOT, include: ['lib/fabric-builder/**/*.test.ts', 'examples/**/build.test.ts'] },
 });

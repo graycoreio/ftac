@@ -4,17 +4,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsc -p lib/fabric-builder",
-    "test": "vitest run --config lib/fabric-builder/vitest.config.ts",
-    "docs": "node lib/fabric-builder/yaml/actions/writeActionsDoc.ts"
+    "typecheck": "nx run-many -t typecheck",
+    "test": "nx run-many -t test",
+    "check": "nx run-many -t check",
+    "build": "nx run-many -t build",
+    "docs": "nx run fabric-builder:docs"
   },
   "dependencies": {
     "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
+    "nx": "23.3.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
+  },
+  "allowScripts": {
+    "nx@23.3.0": true
   },
   "imports": {
     "#fabric-builder": "./lib/fabric-builder/index.ts"

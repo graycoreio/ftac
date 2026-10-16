@@ -7,11 +7,11 @@ import { runBuild } from './runBuild.ts';
 
 const EXAMPLE = resolve(
     dirname(fileURLToPath(import.meta.url)),
-    '../../../terraform/modules/data-workspace/esg/definitions/pipelines/eom_financial_report_generation/Sovos_Tax_File_Monthly/sovos-pipeline.yaml'
+    '../../../examples/hello/hello-pipeline.yaml'
 );
 const tmp = () => mkdtempSync(join(tmpdir(), 'builder-'));
 
-it('reports the Sovos YAML build as in sync', async () =>
+it('reports the example YAML build as in sync', async () =>
     expect(await runBuild(EXAMPLE, true)).toEqual({ file: EXAMPLE, ok: true, message: 'in sync' }));
 
 it('rejects a build file without the expected exports', async () => {
