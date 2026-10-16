@@ -1,23 +1,24 @@
-/* Brand colours taken from the FTAC mark (docs/public/logo.svg). */
+/* Brand colours from the Graycore palette (graycore.io gc-blue / gc-purple / gc-turquoise),
+   the same palette the FTAC mark in docs/public/logo.svg is drawn with. */
 :root {
-    --vp-c-brand-1: #117865;
-    --vp-c-brand-2: #1e9e85;
-    --vp-c-brand-3: #0e6961;
-    --vp-c-brand-soft: rgba(30, 158, 133, 0.14);
+    --vp-c-brand-1: #090c9b;
+    --vp-c-brand-2: #3538ad;
+    --vp-c-brand-3: #090c9b;
+    --vp-c-brand-soft: rgba(9, 12, 155, 0.12);
 
     --vp-home-hero-name-color: transparent;
-    --vp-home-hero-name-background: linear-gradient(120deg, #34d9b6 10%, #117865 90%);
-    --vp-home-hero-image-background-image: linear-gradient(-45deg, #34d9b6 40%, #6ad6f9 60%);
+    --vp-home-hero-name-background: linear-gradient(120deg, #4fb9b8 0%, #090c9b 80%);
+    --vp-home-hero-image-background-image: linear-gradient(-45deg, #60e1e0 40%, #5440cc 60%);
     --vp-home-hero-image-filter: blur(48px);
 }
 
 .dark {
-    --vp-c-brand-1: #3ee8c4;
-    --vp-c-brand-2: #34d9b6;
-    --vp-c-brand-3: #1e9e85;
-    --vp-c-brand-soft: rgba(62, 232, 196, 0.16);
+    --vp-c-brand-1: #9dbeff;
+    --vp-c-brand-2: #8f90d1;
+    --vp-c-brand-3: #3538ad;
+    --vp-c-brand-soft: rgba(98, 100, 191, 0.2);
 
-    --vp-home-hero-name-background: linear-gradient(120deg, #6ad6f9 10%, #34d9b6 90%);
+    --vp-home-hero-name-background: linear-gradient(120deg, #60e1e0 0%, #9285de 90%);
 }
 
 @media (min-width: 640px) {
