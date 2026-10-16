@@ -64,35 +64,7 @@ Drop a `*-pipeline.yaml` (or a `build.ts`) anywhere under a project that uses th
 - [The `fabric-builder` library](./lib/fabric-builder/README.md): the YAML format, the TypeScript API, what the lint catches, and the conventions the generated JSON follows.
 - [Built-in actions](./lib/fabric-builder/yaml/actions/README.md): every `fabric/<name>` you can put in `uses:`, with an example and its compiled output.
 - [Editor schema](./lib/fabric-builder/yaml/pipeline.schema.json): point `yaml-language-server` at it for validation and completion.
-
-## Workspace
-
-This is an [Nx](https://nx.dev) workspace with two projects.
-
-| Project          | Path                  | What it holds                                                                 |
-| ---------------- | --------------------- | ----------------------------------------------------------------------------- |
-| `fabric-builder` | `lib/fabric-builder`  | The library and the local Nx plugin that provides the `build` executor       |
-| `examples`       | `examples`            | Reference pipelines, checked by the executor specs and by CI                  |
-
-```bash
-npx nx run-many -t typecheck   # tsc --noEmit
-npx nx run-many -t test        # the vitest specs, no Fabric or database needed
-npx nx run-many -t check       # every committed pipeline JSON is current
-npx nx run fabric-builder:docs # regenerate the built-in actions README
-```
-
-Node 24 runs the `.ts` files directly, so there is no compile step.
-
-## Contributing
-
-### Want to Help?
-
-Want to report a bug, contribute some code, or improve the documentation? Excellent! Open an issue or a pull request against `main`. CI runs the typecheck, the specs, and the stale-output check on every pull request.
-
-### Conventions
-
-- One function per file; `index.ts` re-exports everything.
-- Every change to a `*-pipeline.yaml`, a `build.ts`, or an action's example commits the regenerated output alongside it. The JSON is the contract.
-- The key order of the generated JSON matches what the Fabric portal exports, so a generated pipeline diffs cleanly against a captured one.
+- [Developer documentation](./docs/developer/README.md): the Nx workspace, how to build, test, and regenerate the committed output.
+- [Contributing](./CONTRIBUTING.md): submission guidelines, coding rules, and the commit message format.
 
 **Think FTAC is the bees-knees? Give our repo a star :star: :heart:.**
