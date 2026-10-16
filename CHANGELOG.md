@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/graycoreio/ftac/compare/v0.1.2...v0.2.0) (2026-10-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for arbitary build.ts
+
+### Features
+
+* drop support for arbitary build.ts ([b3a9218](https://github.com/graycoreio/ftac/commit/b3a921818d33642dc3613e01467325657464b671))
+
 ## [0.1.2](https://github.com/graycoreio/ftac/compare/v0.1.1...v0.1.2) (2026-10-16)
 
 
