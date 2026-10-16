@@ -9,7 +9,14 @@
   "pull-request-title-pattern": "chore: release ${version}",
   "packages": {
     ".": {
-      "release-type": "node"
+      "release-type": "node",
+      "extra-files": [
+        {
+          "path": "lib/fabric-builder/package.json",
+          "type": "json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

@@ -1,6 +1,6 @@
 # The TypeScript API
 
-The YAML compiler is a layer over a small TypeScript library, `lib/fabric-builder`. A pipeline can call that library directly from a `build.ts` beside its sources. The executor treats a `build.ts` and a `*-pipeline.yaml` the same way, and the JSON it produces is identical.
+The YAML compiler is a layer over a small TypeScript library, `@graycore/ftac`, in `lib/fabric-builder`. A pipeline can call that library directly from a `build.ts` beside its sources. The executor treats a `build.ts` and a `*-pipeline.yaml` the same way, and the JSON it produces is identical.
 
 ## A build file
 
