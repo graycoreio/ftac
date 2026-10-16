@@ -1,0 +1,23 @@
+{
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "name": "fabric-builder",
+  "sourceRoot": "lib/fabric-builder",
+  "projectType": "library",
+  "tags": [
+    "type:lib"
+  ],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p lib/fabric-builder"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config lib/fabric-builder/vitest.config.ts"
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://json.schemastore.org/dependabot-2.0.json
+version: 2
+updates:
+  # Maintain npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 3
+    ignore:
+      # Managed by nx migrate.
+      - dependency-name: "nx"
+      - dependency-name: "@nx/*"
+    groups:
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 3

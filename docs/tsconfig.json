@@ -1,0 +1,4 @@
+{
+  "extends": "../lib/fabric-builder/tsconfig.json",
+  "include": ["writeActions.ts", ".vitepress/config.ts"]
+}

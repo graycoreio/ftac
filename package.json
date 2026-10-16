@@ -1,0 +1,32 @@
+{
+  "name": "ftac",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "nx run-many -t typecheck",
+    "test": "nx run-many -t test",
+    "check": "nx run-many -t check",
+    "build": "nx run-many -t build",
+    "docs:dev": "nx run docs:dev",
+    "docs:build": "nx run docs:build",
+    "docs:preview": "nx run docs:preview"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "nx": "23.3.0",
+    "typescript": "^6.0.3",
+    "vitepress": "^1.6.4",
+    "vitest": "^5.0.4"
+  },
+  "allowScripts": {
+    "nx@23.3.0": true,
+    "esbuild@0.21.5": true
+  },
+  "imports": {
+    "#fabric-builder": "./lib/fabric-builder/index.ts"
+  }
+}

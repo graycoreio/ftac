@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/package-lock.json"
+    ],
+    "fabricBuilder": [
+      "{workspaceRoot}/lib/fabric-builder/**/*.ts",
+      "{workspaceRoot}/lib/fabric-builder/tsconfig.json"
+    ]
+  },
+  "targetDefaults": {
+    "typecheck": {
+      "cache": true,
+      "inputs": [
+        "default"
+      ]
+    },
+    "test": {
+      "cache": true,
+      "inputs": [
+        "default"
+      ]
+    },
+    "check": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "fabricBuilder"
+      ]
+    },
+    "build": {
+      "cache": false
+    }
+  },
+  "analytics": false,
+  "tui": {
+    "enabled": false
+  }
+}

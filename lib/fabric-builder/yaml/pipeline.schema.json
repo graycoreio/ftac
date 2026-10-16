@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "Fabric pipeline (GitHub Actions style)",
+  "type": "object",
+  "required": [
+    "name",
+    "output",
+    "steps"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The pipeline's display name in Fabric (informational; Terraform sets it)."
+    },
+    "output": {
+      "type": "string",
+      "description": "Where to write the generated JSON, relative to this file."
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Pipeline parameters: ${{ inputs.NAME }}.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "enum": [
+              "string",
+              "int",
+              "float",
+              "bool",
+              "array",
+              "object"
+            ]
+          },
+          "default": {},
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "vars": {
+      "type": "object",
+      "description": "Pipeline variables, set by set-variable steps: ${{ vars.NAME }}.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "enum": [
+              "String",
+              "Integer",
+              "Boolean",
+              "Array"
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "String",
+                  "Integer",
+                  "Boolean",
+                  "Array"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "env": {
+      "type": "object",
+      "description": "Compile-time macros: ${{ env.NAME }}. Plain text becomes a string literal inside expressions, or the text itself as a whole value; a ${{ }} value is spliced as expression source.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "datasets": {
+      "type": "object",
+      "description": "Named files and tables that steps refer to.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "csv": {
+            "type": "object",
+            "required": [
+              "lakehouse",
+              "folder",
+              "file"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lakehouse": {
+                "type": "string",
+                "description": "Token name, e.g. brz_lakehouse."
+              },
+              "folder": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "delimiter": {
+                "type": "string"
+              },
+              "header": {
+                "type": "boolean"
+              }
+            }
+          },
+          "table": {
+            "type": "object",
+            "required": [
+              "lakehouse",
+              "schema",
+              "table"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lakehouse": {
+                "type": "string"
+              },
+              "schema": {
+                "type": "string"
+              },
+              "table": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "steps": {
+      "$ref": "#/definitions/steps"
+    }
+  },
+  "definitions": {
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/step"
+      }
+    },
+    "need": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "step",
+            "on"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "step": {
+              "type": "string"
+            },
+            "on": {
+              "oneOf": [
+                {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "completed",
+                    "skipped"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "succeeded",
+                      "failed",
+                      "completed",
+                      "skipped"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "uses": {
+          "type": "string",
+          "description": "The action. Built-ins are fabric/<name>; see the actions reference on the docs site, or lib/fabric-builder/yaml/actions/registry.ts."
+        },
+        "with": {
+          "type": "object"
+        },
+        "needs": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/need"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/need"
+              }
+            }
+          ]
+        },
+        "if": {
+          "type": "string",
+          "description": "A single ${{ }} expression. Requires nested steps and takes no uses:."
+        },
+        "steps": {
+          "$ref": "#/definitions/steps"
+        },
+        "timeout": {
+          "type": "string",
+          "pattern": "^(\\d+\\.)?\\d+:\\d{2}:\\d{2}$"
+        },
+        "labels": {
+          "type": "object",
+          "description": "Shown per run in monitoring (userProperties). Each value is text or ${{ }}, e.g. the ForEach item's name.",
+          "additionalProperties": { "type": "string" }
+        },
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "interval": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

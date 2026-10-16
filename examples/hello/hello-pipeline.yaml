@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=../../lib/fabric-builder/yaml/pipeline.schema.json
+#
+# Hello_Pipeline: the smallest pipeline that exercises the YAML compiler end
+# to end. The executor specs check it, so hello.json must stay in sync:
+#
+#   node lib/fabric-builder/cli/main.ts   (or: npm run build:examples)
+#
+name: Hello_Pipeline
+output: hello.json
+
+inputs:
+  # yyyy-MM-dd. Empty = today.
+  date: { type: string, default: '' }
+
+vars:
+  date: String
+
+env:
+  # The connection id of a postgres database. Any GUID will do for the example.
+  POSTGRES: 00000000-0000-0000-0000-000000000000
+  PERIOD: ${{ formatDateTime(vars.date, 'yyyyMM') }}
+
+datasets:
+  out:
+    csv:
+      lakehouse: brz_lakehouse
+      folder: ${{ concat('Hello/', env.PERIOD) }}
+      file: hello.csv
+
+steps:
+  - id: set_date
+    uses: fabric/set-variable
+    with:
+      name: date
+      value: ${{ if(empty(inputs.date), formatDateTime(utcNow(), 'yyyy-MM-dd'), inputs.date) }}
+
+  - id: load
+    needs: set_date
+    uses: fabric/copy
+    timeout: 01:00:00
+    retry: { count: 1, interval: 300 }
+    with:
+      source:
+        postgres:
+          connection: ${{ env.POSTGRES }}
+          query: |-
+            SELECT 1 AS one
+            WHERE ${{ sql(vars.date) }}::date <= CURRENT_DATE
+      sink:
+        csv: out
+
+  # A lone step can't be conditional in Fabric, so the condition wraps a group.
+  - id: only_if_loaded
+    needs: load
+    if: ${{ greater(steps.load.outputs.rowsCopied, 0) }}
+    steps:
+      - id: settle
+        uses: fabric/wait
+        with: { seconds: 1 }

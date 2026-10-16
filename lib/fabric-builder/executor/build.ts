@@ -1,0 +1,26 @@
+// nx executor: run every pipeline build (build.ts or *-pipeline.yaml) under the project.
+//   nx run examples:build             write each pipeline JSON
+//   nx run examples:check             check=true, exit 1 if any is stale
+import { relative, resolve } from 'node:path';
+import { findBuilds } from './findBuilds.ts';
+import { runBuild } from './runBuild.ts';
+
+export type BuildOptions = { check?: boolean; pattern?: string };
+
+type Context = { root: string; projectName?: string; projectsConfigurations?: { projects: Record<string, { root: string }> } };
+
+export default async function build(options: BuildOptions, context: Context): Promise<{ success: boolean }> {
+    const check = options.check ?? false;
+    const projectRoot = context.projectsConfigurations?.projects[context.projectName ?? '']?.root ?? '.';
+    const root = resolve(context.root, projectRoot);
+    const builds = findBuilds(root, options.pattern ?? '**/{build.ts,*-pipeline.yaml}');
+
+    let failed = 0;
+    for (const file of builds) {
+        const r = await runBuild(file, check);
+        if (!r.ok) failed++;
+        console.log(`${r.ok ? 'ok  ' : 'FAIL'} ${relative(context.root, file)}: ${r.message}`);
+    }
+    console.log(`${builds.length - failed}/${builds.length} builds ${check ? 'in sync' : 'written'}`);
+    return { success: failed === 0 };
+}

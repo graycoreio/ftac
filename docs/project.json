@@ -1,0 +1,57 @@
+{
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "name": "docs",
+  "projectType": "application",
+  "tags": [
+    "type:docs"
+  ],
+  "implicitDependencies": [
+    "fabric-builder"
+  ],
+  "targets": {
+    "actions": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "fabricBuilder",
+        "{projectRoot}/writeActions.ts"
+      ],
+      "outputs": [
+        "{projectRoot}/reference/actions"
+      ],
+      "options": {
+        "command": "node docs/writeActions.ts"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "actions"
+      ],
+      "options": {
+        "command": "vitepress dev docs"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "actions"
+      ],
+      "options": {
+        "command": "vitepress build docs"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitepress preview docs"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p docs"
+      }
+    }
+  }
+}
