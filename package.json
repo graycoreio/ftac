@@ -1,0 +1,22 @@
+{
+  "name": "ftac",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p lib/fabric-builder",
+    "test": "vitest run --config lib/fabric-builder/vitest.config.ts",
+    "docs": "node lib/fabric-builder/yaml/actions/writeActionsDoc.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
+  "imports": {
+    "#fabric-builder": "./lib/fabric-builder/index.ts"
+  }
+}

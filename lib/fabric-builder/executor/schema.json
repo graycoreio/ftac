@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Pipeline builds",
+  "description": "Run every build.ts matching the pattern.",
+  "type": "object",
+  "properties": {
+    "check": {
+      "type": "boolean",
+      "description": "Verify each checked-in JSON matches its build instead of writing it.",
+      "default": false
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Glob for build files, relative to the project root.",
+      "default": "**/{build.ts,*-pipeline.yaml}"
+    }
+  },
+  "additionalProperties": false
+}

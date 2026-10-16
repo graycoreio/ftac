@@ -1,0 +1,7 @@
+{
+  "name": "@fabric/fabric-builder",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "executors": "./executors.json"
+}
