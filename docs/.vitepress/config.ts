@@ -27,7 +27,7 @@ const SOFTWARE = {
     author: PUBLISHER,
 };
 
-/** The page's URL under cleanUrls: `guide/index.md` -> `guide/`, `guide/typescript.md` -> `guide/typescript`. */
+/** The page's URL under cleanUrls: `guide/index.md` -> `guide/`, `guide/getting-started.md` -> `guide/getting-started`. */
 function pageUrl(relativePath: string): string {
     return SITE_URL + relativePath.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '');
 }
@@ -114,7 +114,6 @@ export default defineConfig({
                     items: [
                         { text: 'What is FTAC?', link: '/guide/' },
                         { text: 'Getting started', link: '/guide/getting-started' },
-                        { text: 'The TypeScript API', link: '/guide/typescript' },
                     ],
                 },
             ],

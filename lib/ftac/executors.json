@@ -3,7 +3,7 @@
     "build": {
       "implementation": "./executor/build.ts",
       "schema": "./executor/schema.json",
-      "description": "Run every pipeline build.ts under the project: write the pipeline JSON, or with check=true verify the checked-in JSON is current."
+      "description": "Run every pipeline build.ts and *-pipeline.yaml under the project: write the pipeline JSON, or with check=true verify the checked-in JSON is current."
     }
   }
 }

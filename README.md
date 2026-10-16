@@ -11,13 +11,16 @@
 
 <p align="center">
   <em>FTAC compiles <a href="https://learn.microsoft.com/en-us/fabric/data-factory/">Microsoft Fabric</a> pipeline definitions from YAML written in a <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax">GitHub Actions</a>-style syntax.
-  <br>You edit a <code>*-pipeline.yaml</code>. FTAC generates the <code>pipeline-content.json</code> so you never have to.</em>
+  <br>You edit a <code>*-pipeline.yaml</code> and FTAC generates the <code>pipeline-content.json</code>, no more editing and code-reviewing json.</em>
   <br>
 </p>
 
 <p align="center">
     <a href="https://github.com/graycoreio/ftac/actions/workflows/build.yml">
       <img src="https://github.com/graycoreio/ftac/actions/workflows/build.yml/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://www.npmjs.com/package/@graycore/ftac">
+      <img src="https://img.shields.io/npm/v/@graycore/ftac.svg" alt="npm version">
     </a>
     <a href="https://www.github.com/graycoreio/ftac">
       <img src="https://img.shields.io/static/v1.svg?label=stability&message=prerelease&color=3eff85" alt="Pre-release">
@@ -26,11 +29,21 @@
 
 ## Why FTAC?
 
-A Fabric pipeline is a few hundred lines of nested JSON with SQL and ADF expressions buried inside string literals. Reviewing a change in Git means diffing that JSON. FTAC is designed to generate the `pipeline-json` that the `microsoft/fabric` terraform provider expects, but generates it from sources you can actually read: 
+A typical Fabric pipeline is a few hundred lines of nested JSON with SQL and ADF expressions buried inside string literals. Reviewing a change in Git means diffing that JSON and manually editing and reviewing potentially long-form SQL queries. FTAC is designed to generate the `pipeline-json` that the `microsoft/fabric` terraform provider expects, but generates it from sources you can actually read: 
 
 - SQL stays SQL
 - expressions are `${{ }}` with `inputs`, `vars` and `steps.x.outputs`
 - The activity graph is a list of steps with `needs`. 
+
+## Install
+
+```bash
+npm install --save-dev @graycore/ftac
+```
+
+FTAC is published as [`@graycore/ftac`](https://www.npmjs.com/package/@graycore/ftac).
+
+See [Getting started](https://graycoreio.github.io/ftac/guide/getting-started) for the project wiring.
 
 ## Quickstart
 
@@ -66,11 +79,13 @@ steps:
 
 ## Documentation
 
-- [Guide](./docs/guide/index.md): what FTAC is, getting started, and the TypeScript API.
-- Reference: [pipeline syntax](./docs/reference/pipeline-syntax.md) and [expressions](./docs/reference/expressions.md).
-- Built-in actions: every `fabric/<name>` action, its inputs, and what it compiles to. Generated from the registry onto the docs site; run `npm run docs:dev` to browse it.
-- [Developer documentation](./docs/developer/README.md): the Nx workspace, how to build, test, and regenerate the committed output.
-- [Contributing](./CONTRIBUTING.md): submission guidelines, coding rules, and the commit message format.
+- [Getting Started Guide](https://graycoreio.github.io/ftac/guide/getting-started)
+- Reference Guides
+  - [Pipeline syntax](https://graycoreio.github.io/ftac/reference/pipeline-syntax) 
+  - [Expressions](https://graycoreio.github.io/ftac/reference/expressions).
+  - [Built-in actions](https://graycoreio.github.io/ftac/reference/actions/): 
+- [Developer documentation](./docs/developer/README.md)
+- [Contributing](./CONTRIBUTING.md)
 
 ## License
 

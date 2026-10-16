@@ -2,6 +2,15 @@
   "name": "@graycore/ftac",
   "version": "0.0.0-PLACEHOLDER",
   "description": "Fabric Terraform Actions Compiler: Microsoft Fabric pipeline definitions from YAML written like GitHub Actions.",
+  "keywords": [
+    "fabric",
+    "microsoft-fabric",
+    "data-factory",
+    "data-pipeline",
+    "terraform",
+    "nx-plugin",
+    "yaml"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/graycoreio/ftac"

@@ -52,4 +52,4 @@ Each `uses:` names a [built-in action](/reference/actions/). Each action page sh
 
 ## Two ways to author
 
-The YAML format is the one this guide covers. A pipeline can also be authored as a typed `build.ts` that calls the same library directly; see [The TypeScript API](/guide/typescript). Both produce the same JSON, and the Nx executor picks up either.
+The YAML format is the one this guide covers. A pipeline can also be authored as a typed `build.ts` that calls the same library directly; the package [README](https://www.npmjs.com/package/@graycore/ftac) shows a build file. Both produce the same JSON, and the Nx executor picks up either.
