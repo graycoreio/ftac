@@ -18,7 +18,7 @@ writeFileSync(resolve(OUT, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
 const executors = readFileSync(resolve(SRC, 'executors.json'), 'utf8').replaceAll('.ts"', '.js"');
 writeFileSync(resolve(OUT, 'executors.json'), executors);
 
-for (const file of ['README.md', 'executor/schema.json', 'yaml/pipeline.schema.json']) {
+for (const file of ['README.md', 'executor/schema.json', 'executor/decompile.schema.json', 'yaml/pipeline.schema.json']) {
     mkdirSync(dirname(resolve(OUT, file)), { recursive: true });
     copyFileSync(resolve(SRC, file), resolve(OUT, file));
 }

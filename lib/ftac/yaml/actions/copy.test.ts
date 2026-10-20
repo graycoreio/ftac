@@ -1,5 +1,8 @@
 import { expect, it } from 'vitest';
 import { policy } from '../../activities/policy.ts';
+import { compileStep } from '../compileStep.ts';
+import { decompileStep } from '../decompileStep.ts';
+import type { Context, YamlStep } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { copyAction as a } from './copy.ts';
 
@@ -20,3 +23,31 @@ it('adds the tabular translator on request', () => {
 });
 it('rejects a step without source or sink', () =>
     expect(() => a.compile({ step: { id: 'c' }, ctx: { env: {}, datasets: {} }, needs: [], policy: policy(), with: {} })).toThrow(/source must be/));
+
+it('reads a Copy back with its datasets, translator and staging', () => {
+    const datasets = { t: { table: { lakehouse: 'slv_lakehouse', schema: 'S', table: 'T' } } };
+    const written: YamlStep = { id: 'c', uses: 'fabric/copy', with: { source: { table: 't' }, sink: { table: 't', action: 'Append' }, translator: 'tabular', staging: true } };
+    const ctx: Context = { env: {}, datasets: {} };
+    expect(decompileStep(compileStep(written, { env: {}, datasets }), ctx)).toEqual({
+        step: { ...written, with: { ...written.with, source: { table: 'T' }, sink: { table: 'T', action: 'Append' } } },
+        raw: [],
+        notes: [],
+        total: 1,
+    });
+    expect(ctx.datasets).toEqual({ T: datasets.t });
+});
+it('keeps a source and sink it does not know as raw: inside fabric/copy', () => {
+    const ctx: Context = { env: {}, datasets: {} };
+    const w = { source: { raw: { type: 'SqlServerSource' } }, sink: { raw: { type: 'ParquetSink' } } };
+    const d = decompileStep(compileStep({ id: 'c', uses: 'fabric/copy', with: w }, ctx), ctx);
+    expect(d.step.with).toEqual(w);
+    expect(d.raw).toEqual([]);
+    expect(d.notes).toEqual(['c: source kept as raw: JSON', 'c: sink kept as raw: JSON']);
+});
+it('stays raw with a translator other than the tabular default', () => {
+    const ctx: Context = { env: {}, datasets: {} };
+    const act = compileStep({ id: 'c', uses: 'fabric/copy', with: { source: { raw: {} }, sink: { raw: {} } } }, ctx);
+    const d = decompileStep({ ...act, typeProperties: { ...act.typeProperties, translator: { type: 'TabularTranslator', mappings: [] } } }, ctx);
+    expect(d.raw).toEqual(['c']);
+    expect(d.notes).toEqual(['c: fabric/copy: its translator is not the tabular default']);
+});

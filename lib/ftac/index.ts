@@ -58,4 +58,7 @@ export { run } from './cli/run.ts';
 
 export { loadYamlBuild } from './yaml/loadYamlBuild.ts';
 export { compileDocument } from './yaml/compileDocument.ts';
+export { decompileFile, type Decompiled } from './yaml/decompileFile.ts';
+export { decompileDocument, type DecompiledDocument } from './yaml/decompileDocument.ts';
+export { renderYaml } from './yaml/renderYaml.ts';
 export type { YamlDocument, YamlStep } from './yaml/types.ts';

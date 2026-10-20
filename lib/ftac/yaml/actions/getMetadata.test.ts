@@ -1,4 +1,7 @@
 import { expect, it } from 'vitest';
+import { compileStep } from '../compileStep.ts';
+import { decompileStep } from '../decompileStep.ts';
+import type { Context } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { getMetadataAction as a } from './getMetadata.ts';
 
@@ -10,3 +13,11 @@ it('example compiles to a GetMetadata on the named dataset', () =>
     }));
 it('rejects an unknown dataset', () =>
     expect(() => a.compile({ step: { id: 'g' }, ctx: { env: {}, datasets: {} }, needs: [], policy: {} as never, with: { dataset: 'nope' } })).toThrow(/not defined/));
+
+it('reads a GetMetadata back, fields only when not [exists]', () => {
+    const datasets = { f: { csv: { lakehouse: 'brz_lakehouse', folder: 'a', file: 'in.csv' } } };
+    const ctx: Context = { env: {}, datasets: {} };
+    const act = compileStep({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'f', fields: ['exists', 'size'] } }, { env: {}, datasets });
+    expect(decompileStep(act, ctx).step).toEqual({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'in', fields: ['exists', 'size'] } });
+    expect(ctx.datasets).toEqual({ in: datasets.f });
+});

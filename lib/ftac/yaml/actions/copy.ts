@@ -2,6 +2,9 @@ import { copy } from '../../activities/copy.ts';
 import { tabularTranslator } from '../../stores/tabularTranslator.ts';
 import { compileCopySink } from '../compileCopySink.ts';
 import { compileCopySource } from '../compileCopySource.ts';
+import { decompileCopySink } from '../decompileCopySink.ts';
+import { decompileCopySource } from '../decompileCopySource.ts';
+import { firstDifference } from '../firstDifference.ts';
 import type { Action } from './types.ts';
 
 export const copyAction: Action = {
@@ -40,4 +43,20 @@ export const copyAction: Action = {
             },
             { needs, policy }
         ),
+    decompile: ({ activity: { type, typeProperties: tp }, ctx }) => {
+        if (type !== 'Copy' || typeof tp.enableStaging !== 'boolean') return undefined;
+        if (tp.translator !== undefined && firstDifference(tp.translator, tabularTranslator()) !== undefined) throw new Error('its translator is not the tabular default');
+        const source = decompileCopySource(tp.source, ctx);
+        const sink = decompileCopySink(tp.sink, ctx);
+        return {
+            uses: 'fabric/copy',
+            rawParts: [...('raw' in source ? ['source'] : []), ...('raw' in sink ? ['sink'] : [])],
+            with: {
+                source,
+                sink,
+                ...(tp.translator !== undefined && { translator: 'tabular' }),
+                ...(tp.enableStaging && { staging: true }),
+            },
+        };
+    },
 };

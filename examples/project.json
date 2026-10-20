@@ -22,6 +22,10 @@
       "options": {
         "check": true
       }
+    },
+    "decompile": {
+      "executor": "./lib/ftac:decompile",
+      "options": {}
     }
   }
 }

@@ -21,4 +21,5 @@ export const rawAction: Action = {
     externalReferences:
       connection: 00000000-0000-0000-0000-000000000000`,
     compile: ({ step, needs, with: w }) => ({ ...(w as Activity), name: step.id, dependsOn: dependsOn(needs) }),
+    decompile: ({ activity: { name, dependsOn, ...rest } }) => ({ uses: 'fabric/raw', with: rest }),
 };
