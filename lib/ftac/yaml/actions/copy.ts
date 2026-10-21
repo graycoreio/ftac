@@ -50,7 +50,6 @@ export const copyAction: Action = {
         const sink = copySinkToYaml(tp.sink, ctx);
         return {
             uses: 'fabric/copy',
-            rawParts: [...('raw' in source ? ['source'] : []), ...('raw' in sink ? ['sink'] : [])],
             with: {
                 source,
                 sink,

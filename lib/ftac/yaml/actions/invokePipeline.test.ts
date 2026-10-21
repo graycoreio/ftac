@@ -28,7 +28,7 @@ it('wait: false fires and forgets', () => expect(compile({ pipeline: 'pl_x', con
 it('takes an expression as the pipeline id, for a for-each item', () =>
     expect(compile({ pipeline: '${{ item.id }}', connection: 'c' }).typeProperties.pipelineId).toEqual({ value: '@item().id', type: 'Expression' }));
 
-const roundTrip = (step: YamlStep) => stepToYaml(compileStep(step, ctx), ctx).step;
+const roundTrip = (step: YamlStep) => stepToYaml(compileStep(step, ctx), ctx);
 
 it('reads an InvokePipeline back with its parameters', () => {
     const step: YamlStep = {
@@ -43,9 +43,9 @@ it('reads an expression pipeline id back', () => {
     const step: YamlStep = { id: 'run', uses: 'fabric/invoke-pipeline', with: { pipeline: '${{ item.id }}', connection: 'c' } };
     expect(roundTrip(step)).toEqual(step);
 });
-it('stays raw with a deployed GUID for the pipeline id', () => {
+it('rejects a deployed GUID for the pipeline id', () => {
     const act = compile({ pipeline: 'pl_x', connection: 'c' });
-    expect(stepToYaml({ ...act, typeProperties: { ...act.typeProperties, pipelineId: '5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b' } }, ctx).notes).toEqual([
-        'inv: fabric/invoke-pipeline: pipelineId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token',
-    ]);
+    expect(() => stepToYaml({ ...act, typeProperties: { ...act.typeProperties, pipelineId: '5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b' } }, ctx)).toThrow(
+        'inv: cannot be written as YAML: fabric/invoke-pipeline: pipelineId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token'
+    );
 });

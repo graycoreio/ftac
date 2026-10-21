@@ -23,5 +23,5 @@ it('reads a Script back as GO-separated SQL', () => {
         uses: 'fabric/script',
         with: { warehouse: 'gld_datawarehouse', sql: 'CREATE SCHEMA History\nGO\nMERGE History.Period\nUSING x\nON 1 = 1', timeout: '00:30:00' },
     };
-    expect(stepToYaml(compileStep(step, ctx), ctx).step).toEqual(step);
+    expect(stepToYaml(compileStep(step, ctx), ctx)).toEqual(step);
 });

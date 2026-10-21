@@ -9,8 +9,8 @@ export type ToYamlDocument = { doc: YamlDocument; warnings: string[] };
 /**
  * A pipeline definition as a YAML document: the inverse of compileDocument.
  * Datasets the steps use are collected under datasets:.
- * Properties YAML can't express are dropped with a warning, and every
- * activity kept as fabric/raw is listed in one.
+ * Properties YAML can't express are dropped with a warning; an activity
+ * no action reads back exactly throws.
  */
 export function documentToYaml(definition: unknown, { name, output }: { name: string; output: string }): ToYamlDocument {
     const props = (definition as Pipeline | undefined)?.properties;
@@ -35,10 +35,6 @@ export function documentToYaml(definition: unknown, { name, output }: { name: st
     // Steps name the datasets they use, so datasets: is known only once they are read; it still goes before steps.
     const steps = props.activities.map((a) => stepToYaml(a, ctx));
     if (Object.keys(ctx.datasets).length) doc.datasets = ctx.datasets;
-    doc.steps = steps.map((s) => s.step);
-    const raw = steps.flatMap((s) => s.raw);
-    const total = steps.reduce((n, s) => n + s.total, 0);
-    if (raw.length) warnings.push(`${raw.length} of ${total} activities kept as fabric/raw: ${raw.join(', ')}`);
-    warnings.push(...steps.flatMap((s) => s.notes));
+    doc.steps = steps;
     return { doc, warnings };
 }

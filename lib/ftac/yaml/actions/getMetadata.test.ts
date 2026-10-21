@@ -18,6 +18,6 @@ it('reads a GetMetadata back, fields only when not [exists]', () => {
     const datasets = { f: { csv: { lakehouse: 'brz_lakehouse', folder: 'a', file: 'in.csv' } } };
     const ctx: Context = { env: {}, datasets: {} };
     const act = compileStep({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'f', fields: ['exists', 'size'] } }, { env: {}, datasets });
-    expect(stepToYaml(act, ctx).step).toEqual({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'in', fields: ['exists', 'size'] } });
+    expect(stepToYaml(act, ctx)).toEqual({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'in', fields: ['exists', 'size'] } });
     expect(ctx.datasets).toEqual({ in: datasets.f });
 });

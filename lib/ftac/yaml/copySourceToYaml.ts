@@ -13,8 +13,8 @@ function connection(src: Record<string, any>): string | undefined {
 
 /**
  * A Copy source as a `source:` block: the inverse of compileCopySource.
- * One it doesn't recognise is kept as `raw:`, so the Copy itself still
- * reads as fabric/copy. Lakehouse table datasets are named in the context.
+ * Throws for one it doesn't recognise. Lakehouse table datasets are named
+ * in the context.
  */
 export function copySourceToYaml(source: unknown, ctx: Context): object {
     const src = source as Record<string, any>;
@@ -37,5 +37,5 @@ export function copySourceToYaml(source: unknown, ctx: Context): object {
         const d = datasetToYaml(src.datasetSettings);
         if (d && 'table' in d) return { table: nameDataset(d, ctx) };
     }
-    return { raw: source };
+    throw new Error(`its ${src?.type ?? 'untyped'} source is not a Postgres query or table, or a lakehouse table`);
 }

@@ -27,11 +27,10 @@ it('warns about dropped properties', () =>
     expect(documentToYaml(definition, opts).warnings).toEqual(['properties.description has no YAML equivalent and was dropped']));
 it('reads the activities back as actions', () =>
     expect(documentToYaml(definition, opts).doc.steps.map((s) => s.uses)).toEqual(['fabric/set-variable', 'fabric/set-variable', 'fabric/wait']));
-it('counts raw steps nested anywhere', () =>
-    expect(documentToYaml({ properties: { activities: [ifCondition('g', 'true', { then: [{ type: 'Web', typeProperties: {}, name: 'call', dependsOn: [] }] })] } }, opts).warnings).toEqual([
-        '1 of 2 activities kept as fabric/raw: call',
-        'call: no built-in action reads a Web activity',
-    ]));
+it('rejects an activity no action reads back, nested anywhere', () =>
+    expect(() =>
+        documentToYaml({ properties: { activities: [ifCondition('g', 'true', { then: [{ type: 'Web', typeProperties: {}, name: 'call', dependsOn: [] }] })] } }, opts)
+    ).toThrow('call: cannot be written as YAML: no built-in action reads a Web activity'));
 it('omits inputs and vars the definition does not have', () => {
     const { doc } = documentToYaml({ properties: { activities: [wait('w', 1)] } }, opts);
     expect(doc).not.toHaveProperty('inputs');

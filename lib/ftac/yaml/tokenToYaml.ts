@@ -7,7 +7,7 @@ const TOKEN = /^\{\{ \.([A-Za-z_]\w*)_id \}\}$/;
  */
 export const tokenToYaml = (value: unknown): string | undefined => (typeof value === 'string' ? TOKEN.exec(value)?.[1] : undefined);
 
-/** The name in a token the action requires, or an error saying what is there instead, for the fallback reason. */
+/** The name in a token the action requires, or an error saying what is there instead, for the reason it can't be read back. */
 export function tokenName(value: unknown, field: string): string {
     const name = tokenToYaml(value);
     if (name === undefined) throw new Error(`${field} is ${JSON.stringify(value)}, not a {{ .<name>_id }} token`);

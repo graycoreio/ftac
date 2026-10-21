@@ -29,25 +29,23 @@ it('reads a Copy back with its datasets, translator and staging', () => {
     const written: YamlStep = { id: 'c', uses: 'fabric/copy', with: { source: { table: 't' }, sink: { table: 't', action: 'Append' }, translator: 'tabular', staging: true } };
     const ctx: Context = { env: {}, datasets: {} };
     expect(stepToYaml(compileStep(written, { env: {}, datasets }), ctx)).toEqual({
-        step: { ...written, with: { ...written.with, source: { table: 'T' }, sink: { table: 'T', action: 'Append' } } },
-        raw: [],
-        notes: [],
-        total: 1,
+        ...written,
+        with: { ...written.with, source: { table: 'T' }, sink: { table: 'T', action: 'Append' } },
     });
     expect(ctx.datasets).toEqual({ T: datasets.t });
 });
-it('keeps a source and sink it does not know as raw: inside fabric/copy', () => {
-    const ctx: Context = { env: {}, datasets: {} };
-    const w = { source: { raw: { type: 'SqlServerSource' } }, sink: { raw: { type: 'ParquetSink' } } };
-    const d = stepToYaml(compileStep({ id: 'c', uses: 'fabric/copy', with: w }, ctx), ctx);
-    expect(d.step.with).toEqual(w);
-    expect(d.raw).toEqual([]);
-    expect(d.notes).toEqual(['c: source kept as raw: JSON', 'c: sink kept as raw: JSON']);
+it('rejects a source or sink it does not know', () => {
+    const ctx: Context = { env: {}, datasets: { t: { table: { lakehouse: 'slv_lakehouse', schema: 'S', table: 'T' } } } };
+    const read = (w: Record<string, unknown>) => () => stepToYaml(compileStep({ id: 'c', uses: 'fabric/copy', with: w }, ctx), { env: {}, datasets: {} });
+    expect(read({ source: { raw: { type: 'SqlServerSource' } }, sink: { table: 't' } })).toThrow(
+        'c: cannot be written as YAML: fabric/copy: its SqlServerSource source is not a Postgres query or table, or a lakehouse table'
+    );
+    expect(read({ source: { table: 't' }, sink: { raw: { type: 'ParquetSink' } } })).toThrow('c: cannot be written as YAML: fabric/copy: its ParquetSink sink is not a lakehouse CSV or table');
 });
-it('stays raw with a translator other than the tabular default', () => {
+it('rejects a translator other than the tabular default', () => {
     const ctx: Context = { env: {}, datasets: {} };
     const act = compileStep({ id: 'c', uses: 'fabric/copy', with: { source: { raw: {} }, sink: { raw: {} } } }, ctx);
-    const d = stepToYaml({ ...act, typeProperties: { ...act.typeProperties, translator: { type: 'TabularTranslator', mappings: [] } } }, ctx);
-    expect(d.raw).toEqual(['c']);
-    expect(d.notes).toEqual(['c: fabric/copy: its translator is not the tabular default']);
+    expect(() => stepToYaml({ ...act, typeProperties: { ...act.typeProperties, translator: { type: 'TabularTranslator', mappings: [] } } }, ctx)).toThrow(
+        'c: cannot be written as YAML: fabric/copy: its translator is not the tabular default'
+    );
 });

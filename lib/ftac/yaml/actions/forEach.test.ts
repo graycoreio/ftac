@@ -29,9 +29,9 @@ it('reads a ForEach back with its options and nested steps', () => {
         with: { items: '${{ steps.list.outputs.value }}', batch: 4, sequential: true },
         steps: [{ id: 'w', uses: 'fabric/wait', with: { seconds: 1 } }],
     };
-    expect(roundTrip(step)).toEqual({ step, raw: [], notes: [], total: 2 });
+    expect(roundTrip(step)).toEqual(step);
 });
-it('stays raw when the export spells out isSequential: false, which the compiler leaves out', () => {
+it('rejects an export that spells out isSequential: false, which the compiler leaves out', () => {
     const act = compileStep({ id: 'each', uses: 'fabric/for-each', with: { items: '${{ inputs.list }}' }, steps: [] }, ctx);
-    expect(stepToYaml({ ...act, typeProperties: { ...act.typeProperties, isSequential: false } }, ctx).raw).toEqual(['each']);
+    expect(() => stepToYaml({ ...act, typeProperties: { ...act.typeProperties, isSequential: false } }, ctx)).toThrow(/^each: cannot be written as YAML/);
 });

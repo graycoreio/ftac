@@ -20,7 +20,7 @@ it('reads a lakehouse table source back as a named dataset', () => {
     expect(copySourceToYaml(json, ctx)).toEqual({ table: 'Orders' });
     expect(ctx.datasets).toEqual({ Orders: { table: { lakehouse: 'slv_lakehouse', schema: 'S', table: 'Orders' } } });
 });
-it('keeps any other source as raw', () => {
-    const src = { type: 'SqlServerSource', sqlReaderQuery: 'SELECT 1' };
-    expect(copySourceToYaml(src, empty())).toEqual({ raw: src });
-});
+it('rejects any other source', () =>
+    expect(() => copySourceToYaml({ type: 'SqlServerSource', sqlReaderQuery: 'SELECT 1' }, empty())).toThrow(
+        'its SqlServerSource source is not a Postgres query or table, or a lakehouse table'
+    ));

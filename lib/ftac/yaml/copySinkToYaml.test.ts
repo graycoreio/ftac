@@ -17,7 +17,4 @@ it('reads a table sink back, action only when not the default', () => {
     expect(read({ table: 't' }).sink).toEqual({ table: 'T' });
     expect(read({ table: 't', action: 'Append' }).sink).toEqual({ table: 'T', action: 'Append' });
 });
-it('keeps any other sink as raw, naming no dataset', () => {
-    const sink = { type: 'ParquetSink' };
-    expect(read({ raw: sink })).toEqual({ sink: { raw: sink }, datasets: {} });
-});
+it('rejects any other sink', () => expect(() => read({ raw: { type: 'ParquetSink' } })).toThrow('its ParquetSink sink is not a lakehouse CSV or table'));

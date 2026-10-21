@@ -19,10 +19,9 @@ export type ToYamlArgs = {
 
 /**
  * What toYaml() reads back: the step without id, needs, timeout, retry or
- * labels, which are read centrally. rawParts names the with: fields it kept
- * as raw: JSON, such as a Copy source no store reads, so they can be reported.
+ * labels, which are read centrally.
  */
-export type ToYamlBody = Omit<YamlStep, 'id' | 'needs' | 'timeout' | 'retry' | 'labels'> & { rawParts?: string[] };
+export type ToYamlBody = Omit<YamlStep, 'id' | 'needs' | 'timeout' | 'retry' | 'labels'>;
 
 /** A pre-built `uses:` target. Everything but compile() and toYaml() is documentation. */
 export type Action = {
@@ -44,7 +43,7 @@ export type Action = {
      * isn't one. A step is kept only when it compiles to exactly the
      * activity, so a guess that loses something is harmless. Throw to say
      * why an activity of this action's type can't be read back; the message
-     * is reported as the reason it stayed raw.
+     * is reported as the reason it can't be written as YAML.
      */
     toYaml?: (args: ToYamlArgs) => ToYamlBody | undefined;
 };
