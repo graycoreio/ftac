@@ -1,0 +1,138 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "date",
+          "value": {
+            "value": "@if(empty(pipeline().parameters.date), formatDateTime(utcNow(), 'yyyy-MM-dd'), pipeline().parameters.date)",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "set_date",
+        "dependsOn": []
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "PostgreSqlSource",
+            "query": {
+              "value": "SELECT 1 AS one\nWHERE '@{replace(variables('date'), '''', '''''')}'::date <= CURRENT_DATE",
+              "type": "Expression"
+            },
+            "queryTimeout": "00:30:00",
+            "datasetSettings": {
+              "type": "PostgreSqlTable",
+              "typeProperties": {},
+              "schema": [],
+              "externalReferences": {
+                "connection": "00000000-0000-0000-0000-000000000000"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "ParquetSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings",
+              "copyBehavior": "FlattenHierarchy"
+            },
+            "formatSettings": {
+              "type": "ParquetWriteSettings"
+            },
+            "datasetSettings": {
+              "type": "Parquet",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": {
+                    "value": "@concat('Hello/', formatDateTime(variables('date'), 'yyyyMM'))",
+                    "type": "Expression"
+                  },
+                  "fileName": "hello.parquet"
+                }
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "brz_lakehouse",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "{{ .brz_lakehouse_id }}",
+                    "workspaceId": "{{ .workspace_id }}",
+                    "rootFolder": "Files"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 300,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "load",
+        "dependsOn": [
+          {
+            "activity": "set_date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@greater(activity('load').output.rowsCopied, 0)",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [
+            {
+              "type": "Wait",
+              "typeProperties": {
+                "waitTimeInSeconds": 1
+              },
+              "name": "settle",
+              "dependsOn": []
+            }
+          ],
+          "ifFalseActivities": []
+        },
+        "name": "only_if_loaded",
+        "dependsOn": [
+          {
+            "activity": "load",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "date": {
+        "type": "string",
+        "defaultValue": ""
+      }
+    },
+    "variables": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}

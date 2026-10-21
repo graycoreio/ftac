@@ -9,6 +9,7 @@ import { loadYamlBuild } from './loadYamlBuild.ts';
 
 // The example's committed output stands in for a pipeline exported from Fabric.
 const HELLO = resolve(dirname(fileURLToPath(import.meta.url)), '../../../examples/hello/hello.json');
+const FAILURES = resolve(dirname(fileURLToPath(import.meta.url)), '../../../examples/to-yaml-failures');
 const tmp = () => mkdtempSync(join(tmpdir(), 'to-yaml-'));
 
 it('converts the example JSON to YAML that builds the identical file', () => {
@@ -44,3 +45,11 @@ it('reports a definition the compiler rejects', () => {
     writeFileSync(json, JSON.stringify({ properties: { activities: [], variables: { v: { type: 'String' } } } }));
     expect(() => fileToYaml(json)).toThrow(/the YAML does not compile: pipeline is not sound:\n {2}variable 'v' is never set/);
 });
+it('rejects a definition exported after deployment, with a GUID where a token belongs', () =>
+    expect(() => fileToYaml(join(FAILURES, 'deployed-guid.json'), join(tmp(), 'x-pipeline.yaml'))).toThrow(
+        'run_report: cannot be written as YAML: fabric/notebook: notebookId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token'
+    ));
+it('rejects an activity that differs from what its action writes, saying where', () =>
+    expect(() => fileToYaml(join(FAILURES, 'activity-differs.json'), join(tmp(), 'x-pipeline.yaml'))).toThrow(
+        'settle: cannot be written as YAML: fabric/wait differs at description'
+    ));
