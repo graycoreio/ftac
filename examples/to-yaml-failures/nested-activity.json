@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "ForEach",
+        "typeProperties": {
+          "items": {
+            "value": "@pipeline().parameters.urls",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "type": "WebActivity",
+              "typeProperties": {
+                "method": "GET",
+                "url": "https://example.com/health"
+              },
+              "name": "call",
+              "dependsOn": []
+            }
+          ]
+        },
+        "name": "each",
+        "dependsOn": []
+      }
+    ],
+    "parameters": {
+      "urls": {
+        "type": "array",
+        "defaultValue": []
+      }
+    }
+  }
+}

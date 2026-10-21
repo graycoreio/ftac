@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b",
+          "workspaceId": "{{ .workspace_id }}",
+          "parameters": {}
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "run_report",
+        "dependsOn": []
+      }
+    ]
+  }
+}

@@ -14,3 +14,12 @@ it('quotes plain text values', () => expect(a.compile(args({ name: 'x', value: '
 it('carries needs and the light policy', () =>
     expect(a.compile(args({ name: 'x', value: '1' }))).toMatchObject({ policy: { secureInput: false, secureOutput: false }, dependsOn: [{ activity: 'prev' }] }));
 it('takes no policy', () => expect(a.policy).toBe(false));
+
+it('reads a SetVariable back, its value as YAML', () =>
+    expect(
+        a.toYaml!({
+            activity: { type: 'SetVariable', typeProperties: { variableName: 'x', value: { value: "@concat('a-', pipeline().parameters.p)", type: 'Expression' } }, name: 's', dependsOn: [] },
+            ctx: { env: {}, datasets: {} },
+            steps: () => [],
+        })
+    ).toEqual({ uses: 'fabric/set-variable', with: { name: 'x', value: 'a-${{ inputs.p }}' } }));

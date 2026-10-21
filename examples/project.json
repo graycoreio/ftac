@@ -22,6 +22,10 @@
       "options": {
         "check": true
       }
+    },
+    "to-yaml": {
+      "executor": "./lib/ftac:to-yaml",
+      "options": {}
     }
   }
 }
