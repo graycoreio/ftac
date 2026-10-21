@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { compileStep } from '../compileStep.ts';
-import { decompileStep } from '../decompileStep.ts';
+import { stepToYaml } from '../stepToYaml.ts';
 import type { YamlStep } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { forEachAction as a } from './forEach.ts';
@@ -20,7 +20,7 @@ it('requires nested steps and takes no policy', () => {
 });
 
 const ctx = { env: {}, datasets: {} };
-const roundTrip = (step: YamlStep) => decompileStep(compileStep(step, ctx), ctx);
+const roundTrip = (step: YamlStep) => stepToYaml(compileStep(step, ctx), ctx);
 
 it('reads a ForEach back with its options and nested steps', () => {
     const step: YamlStep = {
@@ -33,5 +33,5 @@ it('reads a ForEach back with its options and nested steps', () => {
 });
 it('stays raw when the export spells out isSequential: false, which the compiler leaves out', () => {
     const act = compileStep({ id: 'each', uses: 'fabric/for-each', with: { items: '${{ inputs.list }}' }, steps: [] }, ctx);
-    expect(decompileStep({ ...act, typeProperties: { ...act.typeProperties, isSequential: false } }, ctx).raw).toEqual(['each']);
+    expect(stepToYaml({ ...act, typeProperties: { ...act.typeProperties, isSequential: false } }, ctx).raw).toEqual(['each']);
 });

@@ -5,9 +5,9 @@
       "schema": "./executor/schema.json",
       "description": "Compile every *-pipeline.yaml under the project: write the pipeline JSON, or with check=true verify the checked-in JSON is current."
     },
-    "decompile": {
-      "implementation": "./executor/decompile.ts",
-      "schema": "./executor/decompile.schema.json",
+    "to-yaml": {
+      "implementation": "./executor/toYaml.ts",
+      "schema": "./executor/toYaml.schema.json",
       "description": "Write a *-pipeline.yaml next to each pipeline JSON matching pattern, checked to compile back to the same JSON."
     }
   }

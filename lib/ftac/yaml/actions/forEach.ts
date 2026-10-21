@@ -2,8 +2,8 @@ import { forEach } from '../../activities/forEach.ts';
 import type { Activity } from '../../types.ts';
 import { compileCondition } from '../compileCondition.ts';
 import { compileSteps } from '../compileSteps.ts';
-import { decompileCondition } from '../decompileCondition.ts';
-import { isSlot } from '../decompileSlot.ts';
+import { conditionToYaml } from '../conditionToYaml.ts';
+import { isSlot } from '../slotToYaml.ts';
 import type { Action } from './types.ts';
 
 export const forEachAction: Action = {
@@ -39,9 +39,9 @@ export const forEachAction: Action = {
     },
     compile: ({ step, ctx, needs, with: w }) =>
         forEach(step.id, { items: compileCondition(String(w.items), ctx), activities: compileSteps(step.steps ?? [], ctx), batchCount: w.batch, sequential: w.sequential }, { needs }),
-    decompile: ({ activity: { type, typeProperties: tp }, steps }) => {
+    toYaml: ({ activity: { type, typeProperties: tp }, steps }) => {
         if (type !== 'ForEach' || !isSlot(tp.items) || !tp.items.value.startsWith('@') || !Array.isArray(tp.activities)) return undefined;
-        const items = decompileCondition(tp.items.value.slice(1));
+        const items = conditionToYaml(tp.items.value.slice(1));
         if (items === undefined) return undefined;
         return {
             uses: 'fabric/for-each',

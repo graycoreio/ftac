@@ -2,8 +2,8 @@ import { invokePipeline } from '../../activities/invokePipeline.ts';
 import { token } from '../../stores/token.ts';
 import { compileSlot } from '../compileSlot.ts';
 import { compileText } from '../compileText.ts';
-import { decompileSlot, isSlot } from '../decompileSlot.ts';
-import { tokenName } from '../decompileToken.ts';
+import { slotToYaml, isSlot } from '../slotToYaml.ts';
+import { tokenName } from '../tokenToYaml.ts';
 import type { Action } from './types.ts';
 
 export const invokePipelineAction: Action = {
@@ -37,14 +37,14 @@ export const invokePipelineAction: Action = {
             { needs, policy }
         );
     },
-    decompile: ({ activity: { type, typeProperties: tp, externalReferences } }) => {
+    toYaml: ({ activity: { type, typeProperties: tp, externalReferences } }) => {
         if (type !== 'InvokePipeline' || typeof externalReferences?.connection !== 'string') return undefined;
         // An expression id must hold a ${{ }}: without one the compiler takes the value as a token name.
-        const pipeline = isSlot(tp.pipelineId) ? decompileSlot(tp.pipelineId) : tokenName(tp.pipelineId, 'pipelineId');
+        const pipeline = isSlot(tp.pipelineId) ? slotToYaml(tp.pipelineId) : tokenName(tp.pipelineId, 'pipelineId');
         if (pipeline === undefined || (isSlot(tp.pipelineId) && !pipeline.includes('${{'))) return undefined;
         const parameters: Record<string, string> = {};
         for (const [k, v] of Object.entries((tp.parameters ?? {}) as Record<string, unknown>)) {
-            const yaml = decompileSlot(v);
+            const yaml = slotToYaml(v);
             if (yaml === undefined) return undefined;
             parameters[k] = yaml;
         }

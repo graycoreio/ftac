@@ -10,7 +10,7 @@ export type CompileArgs = {
     with: Record<string, any>;
 };
 
-export type DecompileArgs = {
+export type ToYamlArgs = {
     activity: Activity;
     ctx: Context;
     /** Nested activities as steps, each read back the way a top-level one is. */
@@ -18,13 +18,13 @@ export type DecompileArgs = {
 };
 
 /**
- * What decompile() reads back: the step without id, needs, timeout, retry or
+ * What toYaml() reads back: the step without id, needs, timeout, retry or
  * labels, which are read centrally. rawParts names the with: fields it kept
  * as raw: JSON, such as a Copy source no store reads, so they can be reported.
  */
-export type DecompiledBody = Omit<YamlStep, 'id' | 'needs' | 'timeout' | 'retry' | 'labels'> & { rawParts?: string[] };
+export type ToYamlBody = Omit<YamlStep, 'id' | 'needs' | 'timeout' | 'retry' | 'labels'> & { rawParts?: string[] };
 
-/** A pre-built `uses:` target. Everything but compile() and decompile() is documentation. */
+/** A pre-built `uses:` target. Everything but compile() and toYaml() is documentation. */
 export type Action = {
     name: `fabric/${string}`;
     description: string;
@@ -46,5 +46,5 @@ export type Action = {
      * why an activity of this action's type can't be read back; the message
      * is reported as the reason it stayed raw.
      */
-    decompile?: (args: DecompileArgs) => DecompiledBody | undefined;
+    toYaml?: (args: ToYamlArgs) => ToYamlBody | undefined;
 };

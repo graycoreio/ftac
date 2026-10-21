@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "version": 2,
+  "title": "Pipeline to YAML",
+  "description": "Write a *-pipeline.yaml for every pipeline JSON matching the pattern.",
+  "type": "object",
+  "properties": {
+    "pattern": {
+      "type": "string",
+      "description": "Glob for pipeline JSON files, relative to the project root."
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Overwrite a *-pipeline.yaml that already exists.",
+      "default": false
+    }
+  },
+  "required": ["pattern"],
+  "additionalProperties": false
+}

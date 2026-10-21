@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { compileStep } from '../compileStep.ts';
-import { decompileStep } from '../decompileStep.ts';
+import { stepToYaml } from '../stepToYaml.ts';
 import type { YamlStep } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { scriptAction as a } from './script.ts';
@@ -23,5 +23,5 @@ it('reads a Script back as GO-separated SQL', () => {
         uses: 'fabric/script',
         with: { warehouse: 'gld_datawarehouse', sql: 'CREATE SCHEMA History\nGO\nMERGE History.Period\nUSING x\nON 1 = 1', timeout: '00:30:00' },
     };
-    expect(decompileStep(compileStep(step, ctx), ctx).step).toEqual(step);
+    expect(stepToYaml(compileStep(step, ctx), ctx).step).toEqual(step);
 });

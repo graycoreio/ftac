@@ -125,7 +125,7 @@ export default defineConfig({
                     link: '/reference/executors/',
                     items: [
                         { text: 'build', link: '/reference/executors/build' },
-                        { text: 'decompile', link: '/reference/executors/decompile' },
+                        { text: 'to-yaml', link: '/reference/executors/to-yaml' },
                     ],
                 },
                 {

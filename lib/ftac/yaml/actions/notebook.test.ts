@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { compileStep } from '../compileStep.ts';
-import { decompileStep } from '../decompileStep.ts';
+import { stepToYaml } from '../stepToYaml.ts';
 import type { YamlStep } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { notebookAction as a } from './notebook.ts';
@@ -30,11 +30,11 @@ it('reads a notebook back with its typed parameters', () => {
         retry: { count: 2 },
         with: { notebook: 'nb_clean_orders', parameters: { period: { type: 'string', value: '${{ vars.period }}' }, rows: { type: 'int', value: '10' } } },
     };
-    expect(decompileStep(compileStep(step, ctx), ctx).step).toEqual(step);
+    expect(stepToYaml(compileStep(step, ctx), ctx).step).toEqual(step);
 });
 it('stays raw with a deployed GUID for the notebook id', () => {
     const act = compileStep({ id: 'nb', uses: 'fabric/notebook', with: { notebook: 'nb_x' } }, ctx);
-    expect(decompileStep({ ...act, typeProperties: { ...act.typeProperties, notebookId: '5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b' } }, ctx).notes).toEqual([
+    expect(stepToYaml({ ...act, typeProperties: { ...act.typeProperties, notebookId: '5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b' } }, ctx).notes).toEqual([
         'nb: fabric/notebook: notebookId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token',
     ]);
 });

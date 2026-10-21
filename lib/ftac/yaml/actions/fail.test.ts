@@ -10,7 +10,7 @@ it('example compiles to a Fail whose mixed message becomes a concat', () =>
     }));
 
 const read = (typeProperties: Record<string, unknown>) =>
-    a.decompile!({ activity: { type: 'Fail', typeProperties, name: 'f', dependsOn: [] }, ctx: { env: {}, datasets: {} }, steps: () => [] });
+    a.toYaml!({ activity: { type: 'Fail', typeProperties, name: 'f', dependsOn: [] }, ctx: { env: {}, datasets: {} }, steps: () => [] });
 it('reads a concat message back as mixed text', () =>
     expect(read({ message: { value: "@concat('Bronze table ', item().table_name, ' is empty')", type: 'Expression' }, errorCode: 'BronzeEmpty' })).toEqual({
         uses: 'fabric/fail',

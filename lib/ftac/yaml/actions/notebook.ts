@@ -3,8 +3,8 @@ import { token } from '../../stores/token.ts';
 import type { NotebookParam } from '../../types.ts';
 import { compileSlot } from '../compileSlot.ts';
 import { compileText } from '../compileText.ts';
-import { decompileSlot } from '../decompileSlot.ts';
-import { tokenName } from '../decompileToken.ts';
+import { slotToYaml } from '../slotToYaml.ts';
+import { tokenName } from '../tokenToYaml.ts';
 import type { Action } from './types.ts';
 
 export const notebookAction: Action = {
@@ -35,12 +35,12 @@ export const notebookAction: Action = {
         );
         return notebook(step.id, { id: token(`${compileText(String(w.notebook), ctx, `${step.id}.notebook`)}_id`), parameters }, { needs, policy });
     },
-    decompile: ({ activity: { type, typeProperties: tp } }) => {
+    toYaml: ({ activity: { type, typeProperties: tp } }) => {
         if (type !== 'TridentNotebook') return undefined;
         const name = tokenName(tp.notebookId, 'notebookId');
         const parameters: Record<string, { type: unknown; value: string }> = {};
         for (const [k, p] of Object.entries((tp.parameters ?? {}) as Record<string, { type: unknown; value: unknown }>)) {
-            const value = decompileSlot(p?.value);
+            const value = slotToYaml(p?.value);
             if (value === undefined) return undefined;
             parameters[k] = { type: p.type, value };
         }

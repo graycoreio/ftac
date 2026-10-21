@@ -1,7 +1,7 @@
 import { fail } from '../../activities/fail.ts';
 import { compileValue } from '../compileValue.ts';
-import { isSlot } from '../decompileSlot.ts';
-import { decompileValue } from '../decompileValue.ts';
+import { isSlot } from '../slotToYaml.ts';
+import { valueToYaml } from '../valueToYaml.ts';
 import type { Action } from './types.ts';
 
 export const failAction: Action = {
@@ -18,9 +18,9 @@ export const failAction: Action = {
     message: Bronze table \${{ item.table_name }} is empty
     code: BronzeEmpty`,
     compile: ({ step, ctx, needs, with: w }) => fail(step.id, { message: compileValue(String(w.message), ctx), errorCode: String(w.code) }, { needs }),
-    decompile: ({ activity: { type, typeProperties: tp } }) => {
+    toYaml: ({ activity: { type, typeProperties: tp } }) => {
         if (type !== 'Fail' || !isSlot(tp.message) || !tp.message.value.startsWith('@')) return undefined;
-        const message = decompileValue(tp.message.value.slice(1));
+        const message = valueToYaml(tp.message.value.slice(1));
         return message === undefined ? undefined : { uses: 'fabric/fail', with: { message, code: tp.errorCode } };
     },
 };

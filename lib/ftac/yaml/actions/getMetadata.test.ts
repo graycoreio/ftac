@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { compileStep } from '../compileStep.ts';
-import { decompileStep } from '../decompileStep.ts';
+import { stepToYaml } from '../stepToYaml.ts';
 import type { Context } from '../types.ts';
 import { compileExample } from './compileExample.ts';
 import { getMetadataAction as a } from './getMetadata.ts';
@@ -18,6 +18,6 @@ it('reads a GetMetadata back, fields only when not [exists]', () => {
     const datasets = { f: { csv: { lakehouse: 'brz_lakehouse', folder: 'a', file: 'in.csv' } } };
     const ctx: Context = { env: {}, datasets: {} };
     const act = compileStep({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'f', fields: ['exists', 'size'] } }, { env: {}, datasets });
-    expect(decompileStep(act, ctx).step).toEqual({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'in', fields: ['exists', 'size'] } });
+    expect(stepToYaml(act, ctx).step).toEqual({ id: 'g', uses: 'fabric/get-metadata', with: { dataset: 'in', fields: ['exists', 'size'] } });
     expect(ctx.datasets).toEqual({ in: datasets.f });
 });

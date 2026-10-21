@@ -17,7 +17,7 @@ it('takes no policy', () => expect(a.policy).toBe(false));
 
 it('reads a SetVariable back, its value as YAML', () =>
     expect(
-        a.decompile!({
+        a.toYaml!({
             activity: { type: 'SetVariable', typeProperties: { variableName: 'x', value: { value: "@concat('a-', pipeline().parameters.p)", type: 'Expression' } }, name: 's', dependsOn: [] },
             ctx: { env: {}, datasets: {} },
             steps: () => [],

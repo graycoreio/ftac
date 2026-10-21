@@ -30,4 +30,4 @@ npx nx run <project>:<target>
 Any option can also be set on the command line as `--<option>`, which overrides the value in `project.json`. `npx nx list @graycore/ftac` prints the executors and their options.
 
 - [`build`](build.md): Compile every `*-pipeline.yaml` under the project: write the pipeline JSON, or with `check: true` verify the checked-in JSON is current.
-- [`decompile`](decompile.md): Write a `*-pipeline.yaml` next to each existing pipeline JSON, checked to compile back to the same JSON.
+- [`to-yaml`](to-yaml.md): Write a `*-pipeline.yaml` next to each existing pipeline JSON, checked to compile back to the same JSON.

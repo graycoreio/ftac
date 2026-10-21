@@ -23,8 +23,8 @@
         "check": true
       }
     },
-    "decompile": {
-      "executor": "./lib/ftac:decompile",
+    "to-yaml": {
+      "executor": "./lib/ftac:to-yaml",
       "options": {}
     }
   }
