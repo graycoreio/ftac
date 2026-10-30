@@ -15,3 +15,9 @@ it('requires nested steps and takes no policy', () => {
     expect(a.steps).toBe('required');
     expect(a.policy).toBe(false);
 });
+it('writes isSequential only when sequential: is given, false included', () => {
+    const each = (w: object) => a.compile({ step: { id: 'each', steps: [] }, ctx: { env: {}, datasets: {} }, needs: [], policy: {} as never, with: { items: '${{ inputs.list }}', ...w } }).typeProperties;
+    expect('isSequential' in each({})).toBe(false);
+    expect(each({ sequential: false }).isSequential).toBe(false);
+    expect(each({ sequential: true }).isSequential).toBe(true);
+});
