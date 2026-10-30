@@ -232,6 +232,10 @@
         "steps": {
           "$ref": "#/definitions/steps"
         },
+        "else": {
+          "$ref": "#/definitions/steps",
+          "description": "Steps to run when if: is false. Only on an if: group."
+        },
         "timeout": {
           "type": "string",
           "pattern": "^(\\d+\\.)?\\d+:\\d{2}:\\d{2}$"

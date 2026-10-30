@@ -134,9 +134,9 @@ needs: { step: load, on: [succeeded, failed] }
 
 ## `steps[*].if`
 
-A `${{ }}` condition. The step must have nested `steps:` and no `uses:`.
+A `${{ }}` condition. The step must have nested `steps:` and no `uses:`, and may have `else:`.
 
-A lone activity cannot be conditional in Fabric, so `if:` compiles to an IfCondition activity with the nested steps as its true branch and an empty else. Write the other path as a second `if:` group with the negated condition.
+A lone activity cannot be conditional in Fabric, so `if:` compiles to an IfCondition activity with the nested steps as its true branch and `else:` as its false branch.
 
 ```yaml
 - id: only_if_loaded
@@ -150,9 +150,29 @@ A lone activity cannot be conditional in Fabric, so `if:` compiles to an IfCondi
 
 Outputs of steps inside a group are only visible inside it. Keep a Copy and the step that reads its row count in the same group.
 
+## `steps[*].else`
+
+Nested steps to run when the `if:` condition is false. Only allowed on an `if:` group; leave it out for an empty false branch.
+
+```yaml
+- id: check_loaded
+  needs: load
+  if: ${{ greater(steps.load.outputs.rowsCopied, 0) }}
+  steps:
+    - id: notify
+      uses: fabric/wait
+      with: { seconds: 1 }
+  else:
+    - id: nothing_loaded
+      uses: fabric/wait
+      with: { seconds: 1 }
+```
+
+The same scoping as `steps:` applies: outputs and `needs:` stay inside the branch.
+
 ## `steps[*].steps`
 
-Nested steps, for `if:` and for `fabric/for-each`.
+Nested steps, for `if:` (the true branch; see `else:` for the false one) and for `fabric/for-each`.
 
 ## `steps[*].timeout`
 

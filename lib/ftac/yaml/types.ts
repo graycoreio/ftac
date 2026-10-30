@@ -16,6 +16,7 @@ export type YamlStep = {
     needs?: YamlNeed | YamlNeed[];
     if?: string;
     steps?: YamlStep[];
+    else?: YamlStep[];
     timeout?: string;
     retry?: { count?: number; interval?: number };
     labels?: Record<string, string>;

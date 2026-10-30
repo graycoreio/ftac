@@ -21,6 +21,12 @@ it('compiles an if: group as an IfCondition with no else', () => {
     expect((a.typeProperties.ifTrueActivities as any[]).map((x) => x.name)).toEqual(['w']);
     expect(a.typeProperties.ifFalseActivities).toEqual([]);
 });
+it('compiles else: as the false branch', () => {
+    const a = compileStep({ id: 'g', if: '${{ vars.b }}', steps: [{ id: 'w', uses: 'fabric/wait', with: { seconds: 1 } }], else: [{ id: 'x', uses: 'fabric/wait', with: { seconds: 2 } }] }, ctx);
+    expect((a.typeProperties.ifTrueActivities as any[]).map((x) => x.name)).toEqual(['w']);
+    expect((a.typeProperties.ifFalseActivities as any[]).map((x) => x.name)).toEqual(['x']);
+});
+it('rejects else: outside an if: group', () => expect(() => compileStep({ id: 's', uses: 'fabric/wait', with: { seconds: 1 }, else: [] }, ctx)).toThrow(/else: only goes on an if: group/));
 it('compiles a notebook with typed parameters and a token id', () =>
     expect(compileStep({ id: 'n', uses: 'fabric/notebook', with: { notebook: '${{ env.NB }}', parameters: { k: { type: 'int', value: '${{ int(vars.v) }}' } } } }, ctx).typeProperties).toMatchObject({
         notebookId: '{{ .nb_x_id }}',
