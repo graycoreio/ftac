@@ -42,5 +42,11 @@
   "analytics": false,
   "tui": {
     "enabled": false
+  },
+  "migrate": {
+    "agentic": false
+  },
+  "affected": {
+    "legacy": true
   }
 }
