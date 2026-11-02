@@ -6,6 +6,7 @@ import { compileDocument } from './compileDocument.ts';
 import { documentToYaml } from './documentToYaml.ts';
 import { firstDifference } from './firstDifference.ts';
 import { renderYaml } from './renderYaml.ts';
+import { type Tokens, tokenizeIds } from './tokenizeIds.ts';
 import type { YamlDocument } from './types.ts';
 
 export type ToYamlResult = { yaml: string; out: string; warnings: string[] };
@@ -19,9 +20,11 @@ const expressible = ({ properties: { activities, parameters, variables } }: Pipe
  * A pipeline JSON as *-pipeline.yaml text, by default next to it as
  * <name>-pipeline.yaml. The text is parsed and compiled again, and must
  * give the same definition, key order aside. Nothing is written.
+ * GUIDs in `tokens` are read as the tokens they stand for, so the YAML
+ * compiles to the definition with those tokens in their place.
  */
-export function fileToYaml(path: string, out = join(dirname(path), `${basename(path, '.json')}-pipeline.yaml`)): ToYamlResult {
-    const definition = JSON.parse(readFileSync(path, 'utf8'));
+export function fileToYaml(path: string, out = join(dirname(path), `${basename(path, '.json')}-pipeline.yaml`), tokens: Tokens = {}): ToYamlResult {
+    const { definition, count } = tokenizeIds(JSON.parse(readFileSync(path, 'utf8')), tokens);
     const name = typeof definition?.name === 'string' ? definition.name : basename(path, '.json');
     const output = relative(dirname(out), path).replaceAll('\\', '/');
     const { doc, warnings } = documentToYaml(definition, { name, output });
@@ -35,5 +38,6 @@ export function fileToYaml(path: string, out = join(dirname(path), `${basename(p
     }
     const diff = firstDifference(compiled, expressible(definition));
     if (diff !== undefined) throw new Error(`${path}: the YAML compiles to a different pipeline, first at ${diff || 'the root'}`);
+    if (count) warnings.push(`replaced ${count} GUID${count === 1 ? '' : 's'} with tokens; the next build writes the tokens in their place`);
     return { yaml, out, warnings };
 }

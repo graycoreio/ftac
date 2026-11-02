@@ -61,4 +61,6 @@ export { compileDocument } from './yaml/compileDocument.ts';
 export { fileToYaml, type ToYamlResult } from './yaml/fileToYaml.ts';
 export { documentToYaml, type ToYamlDocument } from './yaml/documentToYaml.ts';
 export { renderYaml } from './yaml/renderYaml.ts';
+export { loadTokens } from './yaml/loadTokens.ts';
+export { tokenizeIds, type Tokens } from './yaml/tokenizeIds.ts';
 export type { YamlDocument, YamlStep } from './yaml/types.ts';

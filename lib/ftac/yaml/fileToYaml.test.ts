@@ -47,8 +47,17 @@ it('reports a definition the compiler rejects', () => {
 });
 it('rejects a definition exported after deployment, with a GUID where a token belongs', () =>
     expect(() => fileToYaml(join(FAILURES, 'deployed-guid.json'), join(tmp(), 'x-pipeline.yaml'))).toThrow(
-        'run_report: cannot be written as YAML: fabric/notebook: notebookId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token'
+        'run_report: cannot be written as YAML: fabric/notebook: notebookId is "5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b", not a {{ .<name>_id }} token; map the GUID to a token name in a tokens file'
     ));
+it('reads the GUIDs in a tokens map back as the names they stand for', () => {
+    const json = join(tmp(), 'p.json');
+    const deployed = readFileSync(join(FAILURES, 'deployed-guid.json'), 'utf8').replace('{{ .workspace_id }}', '3F2A1B0C-9D8E-4F7A-8B6C-5D4E3F2A1B0C');
+    writeFileSync(json, deployed);
+    const tokens = { workspace_id: '3f2a1b0c-9d8e-4f7a-8b6c-5d4e3f2a1b0c', nb_report_id: '5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b' };
+    const { yaml, warnings } = fileToYaml(json, undefined, tokens);
+    expect(yaml).toContain('    with: { notebook: nb_report }\n');
+    expect(warnings).toEqual(['replaced 2 GUIDs with tokens; the next build writes the tokens in their place']);
+});
 it('rejects an activity that differs from what its action writes, saying where', () =>
     expect(() => fileToYaml(join(FAILURES, 'activity-differs.json'), join(tmp(), 'x-pipeline.yaml'))).toThrow(
         'settle: cannot be written as YAML: fabric/wait differs at description'

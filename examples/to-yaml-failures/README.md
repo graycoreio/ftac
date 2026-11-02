@@ -8,7 +8,7 @@ Pipeline JSON that the `to-yaml` executor refuses to convert, one reason per fil
 | `nested-activity.json` | The same WebActivity, nested in a ForEach. |
 | `copy-source.json` | The hello example with a SQL Server Copy source. |
 | `copy-sink.json` | The hello example with a Parquet Copy sink. |
-| `deployed-guid.json` | A notebook whose id is a deployed GUID, not a `{{ .<name>_id }}` token. |
+| `deployed-guid.json` | A notebook whose id is a deployed GUID, not a `{{ .<name>_id }}` token. It converts when a `tokens` file maps that GUID to a name. |
 | `activity-differs.json` | A Wait with an activity `description`, which `fabric/wait` doesn't write. |
 
 `dropped-property.json` is the hello example with a pipeline `description`. It converts, with a warning that the description was dropped.

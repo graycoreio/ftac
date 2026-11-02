@@ -95,3 +95,24 @@ it('warns only about dropped properties', async () => {
         ['1/1 pipelines converted to YAML'],
     ]);
 });
+it('reads GUIDs back as names from the tokens file', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    log.mockClear();
+    const { root, context } = workspace([failure('deployed-guid.json')]);
+    writeFileSync(join(root, 'tokens.yaml'), 'nb_report_id: 5a0b77c2-1d2e-4f30-9a8b-0c1d2e3f4a5b\n');
+    expect(await toYaml({ pattern: '*.json', tokens: 'tokens.yaml' }, context)).toEqual({ success: true });
+    expect(readFileSync(join(root, 'deployed-guid-pipeline.yaml'), 'utf8')).toContain('notebook: nb_report');
+    expect(log.mock.calls).toEqual([
+        ['ok   deployed-guid.json: wrote deployed-guid-pipeline.yaml'],
+        ['     replaced 1 GUID with tokens; the next build writes the tokens in their place'],
+        ['1/1 pipelines converted to YAML'],
+    ]);
+});
+it('fails without converting anything when the tokens file is bad', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const { root, context } = workspace();
+    writeFileSync(join(root, 'tokens.yaml'), 'nb_report_id: not-a-guid\n');
+    expect(await toYaml({ pattern: '*.json', tokens: 'tokens.yaml' }, context)).toEqual({ success: false });
+    expect(existsSync(join(root, 'hello-pipeline.yaml'))).toBe(false);
+    expect(log).toHaveBeenLastCalledWith('FAIL tokens.yaml: nb_report_id is "not-a-guid", not a GUID');
+});

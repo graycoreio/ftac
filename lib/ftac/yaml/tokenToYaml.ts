@@ -1,3 +1,5 @@
+import { GUID } from './tokenizeIds.ts';
+
 const TOKEN = /^\{\{ \.([A-Za-z_]\w*)_id \}\}$/;
 
 /**
@@ -10,6 +12,9 @@ export const tokenToYaml = (value: unknown): string | undefined => (typeof value
 /** The name in a token the action requires, or an error saying what is there instead, for the reason it can't be read back. */
 export function tokenName(value: unknown, field: string): string {
     const name = tokenToYaml(value);
-    if (name === undefined) throw new Error(`${field} is ${JSON.stringify(value)}, not a {{ .<name>_id }} token`);
+    if (name === undefined) {
+        const hint = typeof value === 'string' && GUID.test(value) ? '; map the GUID to a token name in a tokens file' : '';
+        throw new Error(`${field} is ${JSON.stringify(value)}, not a {{ .<name>_id }} token${hint}`);
+    }
     return name;
 }

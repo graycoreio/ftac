@@ -13,6 +13,10 @@
       "type": "boolean",
       "description": "Overwrite a *-pipeline.yaml that already exists.",
       "default": false
+    },
+    "tokens": {
+      "type": "string",
+      "description": "YAML or JSON file, relative to the project root, mapping token names such as nb_clean_orders_id to GUIDs. Those GUIDs are read back as the names."
     }
   },
   "required": ["pattern"],
