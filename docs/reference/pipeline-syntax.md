@@ -136,14 +136,33 @@ needs: { step: load, on: [succeeded, failed] }
 
 A `${{ }}` condition. The step must have nested `steps:` and no `uses:`.
 
-A lone activity cannot be conditional in Fabric, so `if:` compiles to an IfCondition activity with the nested steps as its true branch and an empty else. Write the other path as a second `if:` group with the negated condition.
+A lone activity cannot be conditional in Fabric, so `if:` compiles to an IfCondition activity with the nested steps as its true branch and an empty else.
 
 ```yaml
-- id: only_if_loaded
+- id: loaded
   needs: load
   if: ${{ greater(steps.load.outputs.rowsCopied, 0) }}
   steps:
     - id: notify
+      uses: fabric/wait
+      with: { seconds: 1 }
+```
+
+To run steps when the condition is false, add a second `if:` group with the negated condition:
+
+```yaml
+- id: loaded
+  needs: load
+  if: ${{ greater(steps.load.outputs.rowsCopied, 0) }}
+  steps:
+    - id: notify
+      uses: fabric/wait
+      with: { seconds: 1 }
+- id: not_loaded
+  needs: load
+  if: ${{ not(greater(steps.load.outputs.rowsCopied, 0)) }}
+  steps:
+    - id: nothing_loaded
       uses: fabric/wait
       with: { seconds: 1 }
 ```
