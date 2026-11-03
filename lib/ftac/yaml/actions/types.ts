@@ -10,7 +10,20 @@ export type CompileArgs = {
     with: Record<string, any>;
 };
 
-/** A pre-built `uses:` target. Everything but compile() is documentation. */
+export type ToYamlArgs = {
+    activity: Activity;
+    ctx: Context;
+    /** Nested activities as steps, each read back the way a top-level one is. */
+    steps: (activities: Activity[]) => YamlStep[];
+};
+
+/**
+ * What toYaml() reads back: the step without id, needs, timeout, retry or
+ * labels, which are read centrally.
+ */
+export type ToYamlBody = Omit<YamlStep, 'id' | 'needs' | 'timeout' | 'retry' | 'labels'>;
+
+/** A pre-built `uses:` target. Everything but compile() and toYaml() is documentation. */
 export type Action = {
     name: `fabric/${string}`;
     description: string;
@@ -25,4 +38,12 @@ export type Action = {
     /** The env and datasets the example refers to. */
     exampleContext?: Partial<Context>;
     compile: (args: CompileArgs) => Activity;
+    /**
+     * Read an activity back as this action's step, or undefined when it
+     * isn't one. A step is kept only when it compiles to exactly the
+     * activity, so a guess that loses something is harmless. Throw to say
+     * why an activity of this action's type can't be read back; the message
+     * is reported as the reason it can't be written as YAML.
+     */
+    toYaml?: (args: ToYamlArgs) => ToYamlBody | undefined;
 };

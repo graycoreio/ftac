@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Wait",
+        "typeProperties": {
+          "waitTimeInSeconds": 30
+        },
+        "name": "settle",
+        "dependsOn": [],
+        "description": "Give the lakehouse time to settle"
+      }
+    ]
+  }
+}

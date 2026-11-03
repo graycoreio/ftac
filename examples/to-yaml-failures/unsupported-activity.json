@@ -1,0 +1,15 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "WebActivity",
+        "typeProperties": {
+          "method": "GET",
+          "url": "https://example.com/health"
+        },
+        "name": "call",
+        "dependsOn": []
+      }
+    ]
+  }
+}

@@ -123,7 +123,10 @@ export default defineConfig({
                 {
                     text: 'Executors',
                     link: '/reference/executors/',
-                    items: [{ text: 'build', link: '/reference/executors/build' }],
+                    items: [
+                        { text: 'build', link: '/reference/executors/build' },
+                        { text: 'to-yaml', link: '/reference/executors/to-yaml' },
+                    ],
                 },
                 {
                     text: 'Actions',
