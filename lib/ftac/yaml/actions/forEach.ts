@@ -9,7 +9,7 @@ export const forEachAction: Action = {
     inputs: {
         items: 'A ${{ }} that evaluates to an array, typically steps.<lookup>.outputs.value.',
         batch: 'How many items run at once. Omit for the Fabric default.',
-        sequential: 'true to run one at a time. Default false.',
+        sequential: 'true to run one at a time. Omit for the Fabric default, parallel; false spells that out in the JSON.',
     },
     steps: 'required',
     policy: false,

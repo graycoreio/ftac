@@ -10,3 +10,5 @@ it('omits batchCount and isSequential unless set', () =>
     expect(Object.keys(forEach('each', { items: 'x', activities: [] }).typeProperties)).toEqual(['items', 'activities']));
 it('marks sequential loops', () =>
     expect(forEach('each', { items: 'x', activities: [], sequential: true }).typeProperties.isSequential).toBe(true));
+it('spells out a parallel loop when sequential is false', () =>
+    expect(forEach('each', { items: 'x', activities: [], sequential: false }).typeProperties.isSequential).toBe(false));
