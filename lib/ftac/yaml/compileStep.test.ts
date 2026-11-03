@@ -21,6 +21,12 @@ it('compiles an if: group as an IfCondition with no else', () => {
     expect((a.typeProperties.ifTrueActivities as any[]).map((x) => x.name)).toEqual(['w']);
     expect(a.typeProperties.ifFalseActivities).toEqual([]);
 });
+it('puts description: after the name, on an action or an if: group', () => {
+    const w = compileStep({ id: 'w', description: 'settle', uses: 'fabric/wait', labels: { k: 'v' }, with: { seconds: 1 } }, ctx);
+    expect(Object.keys(w)).toEqual(['type', 'typeProperties', 'name', 'description', 'dependsOn', 'userProperties']);
+    const g = compileStep({ id: 'g', description: 'only on Mondays', if: '${{ vars.b }}', steps: [] }, ctx);
+    expect(g.description).toBe('only on Mondays');
+});
 it('compiles a notebook with typed parameters and a token id', () =>
     expect(compileStep({ id: 'n', uses: 'fabric/notebook', with: { notebook: '${{ env.NB }}', parameters: { k: { type: 'int', value: '${{ int(vars.v) }}' } } } }, ctx).typeProperties).toMatchObject({
         notebookId: '{{ .nb_x_id }}',
