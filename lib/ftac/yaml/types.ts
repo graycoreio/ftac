@@ -12,6 +12,7 @@ export type YamlNeed = string | { step: string; on: 'succeeded' | 'failed' | 'co
 
 export type YamlStep = {
     id: string;
+    description?: string;
     uses?: string;
     with?: Record<string, unknown>;
     needs?: YamlNeed | YamlNeed[];

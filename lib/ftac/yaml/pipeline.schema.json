@@ -235,6 +235,10 @@
           "type": "string",
           "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
         },
+        "description": {
+          "type": "string",
+          "description": "The activity's description in Fabric."
+        },
         "uses": {
           "type": "string",
           "description": "The action. Built-ins are fabric/<name>; see the actions reference on the docs site, or lib/ftac/yaml/actions/registry.ts."

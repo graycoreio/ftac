@@ -42,6 +42,7 @@ export type Activity = {
     externalReferences?: { connection: string };
     policy?: Policy;
     name: string;
+    description?: string;
     dependsOn: Dependency[];
     userProperties?: UserProperty[];
 };
