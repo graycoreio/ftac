@@ -13,3 +13,7 @@ it('compiles a csv sink, quoting all by default', () => {
 });
 it('compiles a table sink with an action', () => expect((compileCopySink({ table: 't', action: 'Append' }, ctx, 'c') as any).tableActionOption).toBe('Append'));
 it('rejects an empty sink', () => expect(() => compileCopySink({}, ctx, 'c')).toThrow(/sink must be/));
+it('leaves out partitionOption on a table sink with partition: false', () => {
+    expect((compileCopySink({ table: 't' }, ctx, 'c') as any).partitionOption).toBe('None');
+    expect('partitionOption' in compileCopySink({ table: 't', partition: false }, ctx, 'c')).toBe(false);
+});
