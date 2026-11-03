@@ -11,6 +11,7 @@ export const scriptAction: Action = {
         warehouse: 'The token name of the warehouse; gld_datawarehouse emits {{ .gld_datawarehouse_id }}.',
         sql: 'The T-SQL, GO-separated.',
         timeout: 'Per-block execution timeout, HH:MM:SS. Default 02:00:00.',
+        query: 'true when the batches return rows (Fabric script type Query). Default false (NonQuery).',
     },
     example: `- id: merge_gold
   uses: fabric/script
@@ -21,5 +22,5 @@ export const scriptAction: Action = {
       GO
       MERGE History.Period ...`,
     compile: ({ step, ctx, needs, policy, with: w }) =>
-        script(step.id, { store: warehouse(compileText(String(w.warehouse), ctx, `${step.id}.warehouse`)), scripts: splitBatches(String(w.sql)), timeout: w.timeout }, { needs, policy }),
+        script(step.id, { store: warehouse(compileText(String(w.warehouse), ctx, `${step.id}.warehouse`)), scripts: splitBatches(String(w.sql), w.query ? 'Query' : 'NonQuery'), timeout: w.timeout }, { needs, policy }),
 };
