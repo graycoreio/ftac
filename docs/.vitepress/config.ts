@@ -83,7 +83,7 @@ export default defineConfig({
     // The SVG is listed last so browsers that support it prefer it over the PNG.
     head: [
         ['link', { rel: 'icon', type: 'image/png', sizes: '48x48', href: `${BASE}favicon.png` }],
-        ['link', { rel: 'icon', type: 'image/svg+xml', href: `${BASE}logo.svg` }],
+        ['link', { rel: 'icon', type: 'image/svg+xml', href: `${BASE}favicon.svg` }],
         ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: `${BASE}apple-touch-icon.png` }],
     ],
     srcExclude: ['developer/**'],
