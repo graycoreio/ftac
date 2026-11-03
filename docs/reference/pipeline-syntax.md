@@ -108,6 +108,14 @@ The activity graph: a list of steps. Each step is one Fabric activity, or with `
 
 The activity name. It must be unique across the whole pipeline, including nested steps.
 
+## `steps[*].description`
+
+The activity's description, shown in the Fabric editor. Any step takes one, including an `if:` group.
+
+```yaml
+description: Copies the day's orders to the silver lakehouse
+```
+
 ## `steps[*].uses`
 
 The [action](/reference/actions/) to run, as `fabric/<name>`. A step with `if:` takes no `uses:`.
