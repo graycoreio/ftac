@@ -24,12 +24,14 @@ export { lakehouseFiles } from './stores/lakehouseFiles.ts';
 export { lakehouseTables } from './stores/lakehouseTables.ts';
 export { warehouse } from './stores/warehouse.ts';
 export { csvFile } from './stores/csvFile.ts';
+export { parquetFile } from './stores/parquetFile.ts';
 export { lakehouseTable } from './stores/lakehouseTable.ts';
 export { connectionDataset } from './stores/connectionDataset.ts';
 export { postgresQuery } from './stores/postgresQuery.ts';
 export { postgresTable } from './stores/postgresTable.ts';
 export { lakehouseTableSource } from './stores/lakehouseTableSource.ts';
 export { csvSink } from './stores/csvSink.ts';
+export { parquetSink } from './stores/parquetSink.ts';
 export { lakehouseTableSink } from './stores/lakehouseTableSink.ts';
 export { tabularTranslator } from './stores/tabularTranslator.ts';
 

@@ -9,7 +9,7 @@ export const copyAction: Action = {
     description: 'Copy from a source to a sink. Read the row count as steps.<id>.outputs.rowsCopied.',
     inputs: {
         source: 'One of: postgres { connection, query | table { schema, table }, timeout }, table <dataset>, or raw <source JSON>. A query may embed ${{ sql(expr) }}.',
-        sink: 'One of: csv <dataset> (plus quote-all, default true), table <dataset> (plus action: OverwriteSchema | Overwrite | Append), or raw <sink JSON>.',
+        sink: 'One of: csv <dataset> (plus quote-all, default true), parquet <dataset>, table <dataset> (plus action: OverwriteSchema | Overwrite | Append), or raw <sink JSON>.',
         translator: '"tabular" for the portal default type-conversion translator. Omitted by default.',
         staging: 'Enable staging. Default false.',
     },

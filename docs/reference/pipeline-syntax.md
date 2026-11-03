@@ -92,11 +92,13 @@ Named store locations that Copy sources and sinks refer to. Each has exactly one
 datasets:
   out_file:
     csv: { lakehouse: brz_lakehouse, folder: Sales/Orders, file: out.csv }
+  staging_file:
+    parquet: { lakehouse: brz_lakehouse, folder: Sales/_staging, file: orders.parquet }
   silver_table:
     table: { lakehouse: slv_lakehouse, schema: Sales, table: ${{ item.table_name }} }
 ```
 
-A `csv` dataset also takes an optional `delimiter` and `header`. A Copy sink names a dataset as `csv: out_file` or `table: silver_table`. Fields may hold `${{ }}` expressions.
+A `csv` dataset also takes an optional `delimiter` and `header`. A `parquet` dataset keeps column types and takes an optional `compression`: `snappy` (the default), `gzip` or `none`. A Copy sink names a dataset as `csv: out_file`, `parquet: staging_file` or `table: silver_table`; `fabric/get-metadata` reads a `csv` or `parquet` dataset in its own format. Fields may hold `${{ }}` expressions.
 
 Lakehouse names become provider tokens in the JSON: `brz_lakehouse` emits `{{ .brz_lakehouse_id }}`, which Terraform fills in.
 

@@ -117,6 +117,36 @@
               }
             }
           },
+          "parquet": {
+            "type": "object",
+            "description": "A Parquet file under the lakehouse's Files. Keeps column types, unlike csv.",
+            "required": [
+              "lakehouse",
+              "folder",
+              "file"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "lakehouse": {
+                "type": "string",
+                "description": "Token name, e.g. brz_lakehouse."
+              },
+              "folder": {
+                "type": "string"
+              },
+              "file": {
+                "type": "string"
+              },
+              "compression": {
+                "enum": [
+                  "snappy",
+                  "gzip",
+                  "none"
+                ],
+                "description": "Default snappy."
+              }
+            }
+          },
           "table": {
             "type": "object",
             "required": [

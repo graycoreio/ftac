@@ -4,8 +4,9 @@ export type YamlInput = { type: 'string' | 'int' | 'float' | 'bool' | 'array' | 
 export type YamlVar = 'String' | 'Integer' | 'Boolean' | 'Array' | { type: 'String' | 'Integer' | 'Boolean' | 'Array' };
 
 export type YamlCsv = { lakehouse: string; folder: string; file: string; delimiter?: string; header?: boolean };
+export type YamlParquet = { lakehouse: string; folder: string; file: string; compression?: 'snappy' | 'gzip' | 'none' };
 export type YamlTable = { lakehouse: string; schema: string; table: string };
-export type YamlDataset = { csv: YamlCsv } | { table: YamlTable };
+export type YamlDataset = { csv: YamlCsv } | { parquet: YamlParquet } | { table: YamlTable };
 
 export type YamlNeed = string | { step: string; on: 'succeeded' | 'failed' | 'completed' | 'skipped' | ('succeeded' | 'failed' | 'completed' | 'skipped')[] };
 
