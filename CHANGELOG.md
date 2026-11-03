@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/graycoreio/ftac/compare/v0.2.0...v0.2.1) (2026-11-03)
+
+
+### Features
+
+* add parquet dataset and copy sink ([#18](https://github.com/graycoreio/ftac/issues/18)) ([678cc42](https://github.com/graycoreio/ftac/commit/678cc423c1ce64d89614d111ed9f7570071198ca))
+* **yaml:** pass through step description ([#19](https://github.com/graycoreio/ftac/issues/19)) ([58991fa](https://github.com/graycoreio/ftac/commit/58991fa60c6d35cb2db765e8919f677dcf7a0e64))
+
 ## [0.2.0](https://github.com/graycoreio/ftac/compare/v0.1.2...v0.2.0) (2026-10-16)
 
 
